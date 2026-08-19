@@ -1,0 +1,115 @@
+# Documentation controls.
+#
+# This file is the reason Plumbline exists as something other than a linter.
+#
+# A control set can be entirely green while the prose describing it is a year
+# stale, and an auditor reading that prose is being misled by a system that
+# reports itself healthy. So documentation is treated as a control surface with
+# its own evidence and its own failure modes.
+
+controls:
+  - id: DOC-001
+    narrative_hash: e3d0f3b067ba67ed
+    title: Control narratives match their last reviewed version
+    description: >
+      Each control records the fingerprint of the narrative a human last
+      reviewed. If the words change without a fresh review, the control is
+      flagged even though its underlying check still passes.
+    check: docs.narrative_current
+    severity: high
+    owner: compliance
+    tags: [documentation, drift, observed]
+    frameworks:
+      - framework: SOC2
+        clause: CC8.1
+        title: Change management for infrastructure and software
+      - framework: ISO27001
+        clause: A.8.9
+        title: Configuration management
+      - framework: GDPR
+        clause: Art.30
+        title: Records of processing activities
+    narrative: >
+      Observed. The narrative text is normalised for whitespace and hashed, and
+      the result is compared against the narrative_hash recorded in the control
+      file. Reflowing a paragraph therefore does not register as drift, while
+      changing a word does. Three outcomes are kept distinct on purpose: no
+      narrative at all fails, a narrative that was never attested warns, and a
+      narrative that diverged after attestation fails. Collapsing those into one
+      status would hide the difference between work never started and work that
+      has silently rotted. The check cannot judge whether a narrative is
+      accurate, only whether a person has confirmed it since it last changed.
+
+  - id: DOC-002
+    narrative_hash: 7df2edaf930e79b8
+    title: The documentation set covers a minimum surface
+    description: >
+      A reader must be able to install the tool, complete a task, understand the
+      commands, and find help when something breaks.
+    check: docs.pages_present
+    severity: medium
+    owner: engineering
+    tags: [documentation, observed]
+    params:
+      min_chars: 400
+      pages:
+        - docs/index.md
+        - docs/quickstart.md
+        - docs/guides/writing-controls.md
+        - docs/guides/documentation-drift.md
+        - docs/reference/cli.md
+        - docs/reference/checks.md
+        - docs/troubleshooting.md
+        - CHANGELOG.md
+    frameworks:
+      - framework: SOC2
+        clause: CC8.1
+        title: Change management for infrastructure and software
+      - framework: ISO27001
+        clause: A.8.25
+        title: Secure development lifecycle
+    narrative: >
+      Observed by checking that each required page exists and carries at least
+      four hundred characters of content. The character floor exists because an
+      empty file named quickstart.md satisfies a naive existence check while
+      helping nobody, and a stub is arguably worse than an absence since it
+      stops anyone else from noticing the gap. A present-but-thin page warns
+      rather than fails, which keeps the signal honest: the page is there, it is
+      simply not finished yet.
+
+  - id: DOC-003
+    narrative_hash: d8ee81fca194edbb
+    title: Narratives explain where their evidence comes from
+    description: >
+      A narrative that describes a control but never says how it is verified
+      leaves the reader unable to reproduce the finding.
+    check: docs.evidence_explained
+    severity: medium
+    owner: compliance
+    tags: [documentation, evidence, observed]
+    params:
+      markers:
+        - evidence
+        - verified
+        - observed
+        - declared
+        - collected
+        - attested
+    frameworks:
+      - framework: SOC2
+        clause: CC7.1
+        title: Detection of configuration changes and vulnerabilities
+      - framework: ISO27001
+        clause: A.8.15
+        title: Logging
+      - framework: GDPR
+        clause: Art.30
+        title: Records of processing activities
+    narrative: >
+      Observed, though crudely. The narrative is scanned for words that indicate
+      provenance was addressed at all: evidence, verified, observed, declared,
+      collected, attested. This is a keyword search and it is easy to satisfy
+      without meaning it, which is a real weakness worth naming rather than
+      hiding. Its value is as a prompt during review rather than as an
+      assurance: a narrative containing none of these words almost certainly
+      never told the reader whether a human or a machine established the fact.

@@ -1,0 +1,132 @@
+# Access control and authentication.
+#
+# These controls are mostly declarations rather than observations: whether MFA
+# is enforced lives in an identity provider, not in this repository. Each one
+# therefore records evidence_type "declared" or "attested", and the narrative
+# says plainly what a reader should and should not conclude from that.
+
+controls:
+  - id: AC-001
+    narrative_hash: ff9b2cd5855f92cc
+    title: Multi-factor authentication is enforced for all human accounts
+    description: >
+      Every interactive account with access to production or to customer data
+      must complete a second authentication factor. Service accounts are out of
+      scope here and are covered by AC-004.
+    check: posture.is_true
+    severity: critical
+    owner: security-lead
+    tags: [access, identity, baseline]
+    params:
+      key: identity.mfa_enforced
+    frameworks:
+      - framework: SOC2
+        clause: CC6.1
+        title: Logical access security software and infrastructure
+      - framework: ISO27001
+        clause: A.5.17
+        title: Authentication information
+      - framework: PCIDSS
+        clause: "8.4"
+        title: Multi-factor authentication
+      - framework: HIPAA
+        clause: 164.312(a)(1)
+        title: Access control
+    narrative: >
+      MFA is enforced at the identity provider for every human account, which
+      means the setting cannot be bypassed by an individual user changing their
+      own profile. The evidence for this control is declared in plumbline.yaml
+      rather than observed directly, because this repository has no credentials
+      for the identity provider and should not have any. An auditor wanting
+      stronger assurance should ask for a screenshot of the enforcement policy
+      or an export of per-user MFA state; this control confirms that the
+      organisation has asserted the position, not that a machine verified it.
+
+  - id: AC-002
+    narrative_hash: f616b250a3267ace
+    title: Access is granted on a least-privilege basis
+    description: >
+      Permissions are assigned through roles rather than to individuals, and a
+      role grants the narrowest set of permissions that still allows the job to
+      be done.
+    check: posture.is_true
+    severity: high
+    owner: security-lead
+    tags: [access, baseline]
+    params:
+      key: identity.least_privilege
+    frameworks:
+      - framework: SOC2
+        clause: CC6.3
+        title: Role-based access and least privilege
+      - framework: ISO27001
+        clause: A.5.15
+        title: Access control
+      - framework: HIPAA
+        clause: 164.308(a)(4)
+        title: Information access management
+    narrative: >
+      Access is mediated by named roles, and new permissions are added to a role
+      rather than to a person. This is a declared control. It is worth noting
+      what the declaration does not cover: it says nothing about whether the
+      roles themselves are narrow, and a single overly broad role would satisfy
+      this control while defeating its purpose. AC-003 is the compensating
+      control, since a periodic review is where an over-broad role gets caught.
+
+  - id: AC-003
+    narrative_hash: 01497addd6114386
+    title: User access is reviewed on a defined cadence
+    description: >
+      Someone accountable reviews who has access to what, on a schedule, and
+      records that the review happened.
+    check: posture.attested
+    severity: high
+    owner: security-lead
+    tags: [access, review]
+    params:
+      key: identity.access_review
+    frameworks:
+      - framework: SOC2
+        clause: CC6.2
+        title: Registration and authorisation of new users
+      - framework: ISO27001
+        clause: A.5.15
+        title: Access control
+      - framework: PCIDSS
+        clause: "8.3"
+        title: Strong authentication for users
+    narrative: >
+      Access reviews are attested rather than merely declared: the posture
+      document must name who performed the review and on what date, so this
+      control cannot pass on an anonymous "true". That is a deliberately higher
+      bar than AC-001 and AC-002, because an access review with nobody's name
+      against it is not a review. The check verifies that an attestation exists
+      and is complete; it cannot verify that the review was thorough.
+
+  - id: AC-004
+    narrative_hash: 2a2ca364ece4a904
+    title: Privileged session lifetime is bounded
+    description: >
+      Elevated credentials expire. A privileged session that never ends is a
+      standing invitation.
+    check: posture.at_most
+    severity: high
+    owner: platform-team
+    tags: [access, identity]
+    params:
+      key: identity.privileged_session_hours
+      maximum: 12
+    frameworks:
+      - framework: SOC2
+        clause: CC6.1
+        title: Logical access security software and infrastructure
+      - framework: ISO27001
+        clause: A.5.15
+        title: Access control
+    narrative: >
+      Privileged sessions are capped at twelve hours, chosen so that a session
+      cannot outlive a working day and be resumed the next morning by whoever
+      is at the keyboard. The value is declared in plumbline.yaml and compared
+      against the ceiling by this control. The number is a policy choice rather
+      than a standard: no framework cited here prescribes twelve hours, and an
+      organisation with a different risk appetite might reasonably pick four.

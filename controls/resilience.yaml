@@ -1,0 +1,128 @@
+# Continuity, monitoring and incident response.
+
+controls:
+  - id: RES-001
+    narrative_hash: ebda176838bb288c
+    title: Backups are taken and restoration is tested
+    description: >
+      Backups exist and someone has actually restored from one. An untested
+      backup is a hope, not a control.
+    check: posture.attested
+    severity: critical
+    owner: platform-team
+    tags: [continuity, backup]
+    params:
+      key: continuity.restore_test
+    frameworks:
+      - framework: SOC2
+        clause: A1.2
+        title: Environmental protections, backup and recovery
+      - framework: ISO27001
+        clause: A.5.30
+        title: ICT readiness for business continuity
+      - framework: HIPAA
+        clause: 164.308(a)(7)
+        title: Contingency plan
+    narrative: >
+      This control requires an attestation rather than a declaration: the posture
+      document must name who performed the restore test and on what date. The
+      higher bar is deliberate. Almost every organisation can declare that
+      backups are configured, and far fewer can name the last time somebody
+      restored from one and confirmed the data was usable. The check verifies an
+      attestation is present and complete; it cannot confirm the restore
+      succeeded or that the recovered data was correct.
+
+  - id: RES-002
+    narrative_hash: 0a5bef4f13e29883
+    title: Security events are monitored and alerted on
+    description: >
+      Security-relevant events reach a person or a system that will act on them.
+    check: posture.is_true
+    severity: high
+    owner: security-lead
+    tags: [monitoring, incident]
+    params:
+      key: monitoring.alerting_enabled
+    frameworks:
+      - framework: SOC2
+        clause: CC7.2
+        title: Monitoring for anomalies and security events
+      - framework: ISO27001
+        clause: A.8.16
+        title: Monitoring activities
+      - framework: PCIDSS
+        clause: "10.2"
+        title: Audit logs for all system components
+      - framework: HIPAA
+        clause: 164.312(b)
+        title: Audit controls
+    narrative: >
+      Declared in plumbline.yaml. Alerting is the difference between logging and
+      monitoring: logs that nobody reads satisfy a retention requirement while
+      providing no detection at all. SEC-004 covers how long logs are kept, and
+      this control covers whether anything watches them. Both are declarations
+      and neither is observed by this tool.
+
+  - id: RES-003
+    narrative_hash: a7bcfa79e37a9d47
+    title: An incident response plan exists and names its roles
+    description: >
+      A written plan says who does what when something goes wrong, decided in
+      advance rather than during the incident.
+    check: posture.attested
+    severity: high
+    owner: security-lead
+    tags: [incident, governance]
+    params:
+      key: incident.response_plan
+    frameworks:
+      - framework: SOC2
+        clause: CC7.4
+        title: Response to identified security incidents
+      - framework: ISO27001
+        clause: A.5.30
+        title: ICT readiness for business continuity
+      - framework: PCIDSS
+        clause: "12.10"
+        title: Incident response readiness
+      - framework: GDPR
+        clause: Art.33
+        title: Notification of a personal data breach
+    narrative: >
+      Attested, so the posture document must record who owns the plan and when
+      it was last confirmed. A plan that names no roles is a document rather than
+      a control, and GDPR Article 33 makes the point sharply: a seventy-two hour
+      notification deadline is not something to work out while an incident is
+      running. The check confirms an attestation exists and cannot assess whether
+      the plan is any good or whether it has ever been rehearsed.
+
+  - id: RES-004
+    narrative_hash: 40fe3720491aa966
+    title: Third-party vendors with data access are recorded
+    description: >
+      A register lists every vendor that can reach customer data, because a
+      subprocessor nobody remembers is a subprocessor nobody assesses.
+    check: posture.at_least
+    severity: medium
+    owner: compliance
+    tags: [vendor, governance]
+    params:
+      key: vendor.register_count
+      minimum: 1
+    frameworks:
+      - framework: SOC2
+        clause: CC6.6
+        title: Protection against external threats
+      - framework: ISO27001
+        clause: A.5.23
+        title: Information security for cloud services
+      - framework: GDPR
+        clause: Art.30
+        title: Records of processing activities
+    narrative: >
+      Declared. The posture document states how many vendors are recorded in the
+      register, and this control requires at least one, on the reasoning that any
+      real system depends on somebody. A count is admittedly a thin proxy for a
+      vendor management programme: it confirms a register exists and is not empty,
+      and says nothing about whether each vendor was assessed. GDPR Article 30
+      wants the register itself, which lives outside this repository.

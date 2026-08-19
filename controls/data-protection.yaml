@@ -1,0 +1,174 @@
+# Encryption, retention and secret handling.
+#
+# SEC-001 is one of the few controls in this set that is genuinely observed
+# rather than declared: it reads the files in the repository. The distinction is
+# called out in each narrative so an auditor knows which findings rest on a
+# machine and which rest on somebody's word.
+
+controls:
+  - id: SEC-001
+    narrative_hash: 00ce0892f2c8c3b4
+    title: No credentials are committed to the repository
+    description: >
+      Tracked text files contain no strings shaped like access keys, private
+      keys or long-lived tokens.
+    check: repo.no_hardcoded_secrets
+    severity: critical
+    owner: platform-team
+    tags: [secrets, sdlc, observed]
+    params:
+      allow_paths:
+        - tests/
+        - docs/
+    frameworks:
+      - framework: SOC2
+        clause: CC6.1
+        title: Logical access security software and infrastructure
+      - framework: ISO27001
+        clause: A.8.12
+        title: Data leakage prevention
+      - framework: PCIDSS
+        clause: "3.5"
+        title: Protection of stored account data
+      - framework: GDPR
+        clause: Art.32
+        title: Security of processing
+    narrative: >
+      This control is observed, not declared. Every tracked text file is read
+      and matched against patterns for AWS keys, PEM private key blocks, Slack
+      and GitHub tokens, and assignments to variables named like secrets. The
+      limits are worth stating honestly: it is a regular-expression scan of the
+      current working tree, so it will not find a credential that was committed
+      and later removed but still lives in git history, and it will not
+      recognise a high-entropy string that does not match a known shape. Paths
+      under tests/ and docs/ are excluded because both legitimately contain
+      example credentials. Treat a pass as evidence that the obvious mistake has
+      not been made, not as proof the repository is clean.
+
+  - id: SEC-002
+    narrative_hash: 060816af5a442329
+    title: Data is encrypted at rest
+    description: >
+      Persistent stores holding customer or personal data use encryption at
+      rest with managed keys.
+    check: posture.is_true
+    severity: critical
+    owner: platform-team
+    tags: [encryption, data]
+    params:
+      key: data.encryption_at_rest
+    frameworks:
+      - framework: SOC2
+        clause: CC6.7
+        title: Restriction of data transmission and movement
+      - framework: ISO27001
+        clause: A.8.24
+        title: Use of cryptography
+      - framework: HIPAA
+        clause: 164.312(a)(1)
+        title: Access control
+      - framework: GDPR
+        clause: Art.32
+        title: Security of processing
+    narrative: >
+      Every persistent store holding personal data is encrypted at rest using
+      keys managed by the cloud provider's key service. The evidence is declared
+      in plumbline.yaml. Verifying it properly means querying the storage
+      provider, which this tool deliberately does not do, so the control is a
+      record of the organisation's position rather than an observation.
+
+  - id: SEC-003
+    narrative_hash: 0844bf7461a1f909
+    title: Data is encrypted in transit
+    description: >
+      All network traffic carrying customer data uses TLS 1.2 or higher.
+    check: posture.one_of
+    severity: critical
+    owner: platform-team
+    tags: [encryption, data]
+    params:
+      key: data.min_tls_version
+      allowed: ["1.2", "1.3"]
+    frameworks:
+      - framework: SOC2
+        clause: CC6.7
+        title: Restriction of data transmission and movement
+      - framework: ISO27001
+        clause: A.8.24
+        title: Use of cryptography
+      - framework: PCIDSS
+        clause: "4.2"
+        title: Strong cryptography during transmission
+      - framework: HIPAA
+        clause: 164.312(e)(1)
+        title: Transmission security
+    narrative: >
+      The minimum accepted TLS version is declared in plumbline.yaml and checked
+      against an allowed set of 1.2 and 1.3. Anything older fails, including
+      TLS 1.1, which is no longer considered adequate by any framework cited
+      here. The check verifies the declared floor, not the actual negotiated
+      version on any given connection.
+
+  - id: SEC-004
+    narrative_hash: b716408a8fb5eaf5
+    title: Audit logs are retained long enough to investigate an incident
+    description: >
+      Security-relevant logs are kept for at least ninety days so that an
+      incident discovered late can still be reconstructed.
+    check: posture.at_least
+    severity: high
+    owner: platform-team
+    tags: [logging, data]
+    params:
+      key: logging.retention_days
+      minimum: 90
+    frameworks:
+      - framework: SOC2
+        clause: CC7.2
+        title: Monitoring for anomalies and security events
+      - framework: ISO27001
+        clause: A.8.15
+        title: Logging
+      - framework: PCIDSS
+        clause: "10.5"
+        title: Audit log retention
+      - framework: HIPAA
+        clause: 164.312(b)
+        title: Audit controls
+    narrative: >
+      Retention is declared in plumbline.yaml and compared against a ninety day
+      floor. Ninety days is chosen because PCI DSS requires three months of
+      immediately available logs, and because the gap between a breach and its
+      discovery is frequently longer than a month. Organisations under GDPR
+      Article 33 pressure often keep considerably more. This control checks the
+      declared figure and cannot confirm that logs are actually present for that
+      whole window.
+
+  - id: SEC-005
+    narrative_hash: e08629cab376cc68
+    title: Secrets are excluded from version control by configuration
+    description: >
+      The repository's .gitignore excludes the file patterns that most often
+      leak credentials.
+    check: repo.gitignore_excludes
+    severity: high
+    owner: platform-team
+    tags: [secrets, sdlc, observed]
+    params:
+      patterns:
+        - ".env"
+        - "*.pem"
+        - "*.key"
+    frameworks:
+      - framework: SOC2
+        clause: CC6.1
+        title: Logical access security software and infrastructure
+      - framework: ISO27001
+        clause: A.8.12
+        title: Data leakage prevention
+    narrative: >
+      This control is observed. It reads .gitignore and confirms that .env, and
+      the *.pem and *.key patterns, are listed. It is a preventive companion to
+      SEC-001, which is detective: SEC-005 tries to stop a credential being
+      committed, SEC-001 looks for one that already was. Neither helps if a
+      developer forces an add past the ignore file, which is why both exist.

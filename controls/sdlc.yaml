@@ -1,0 +1,154 @@
+# Secure development lifecycle.
+#
+# Every control in this file is observed rather than declared, because all of
+# them are answerable by reading the repository. That makes this the strongest
+# evidence in the whole control set, and the narratives say so.
+
+controls:
+  - id: SDLC-001
+    narrative_hash: ee1de2b316b5eee7
+    title: Changes are validated by an automated pipeline
+    description: >
+      A pipeline definition exists in the repository and runs on change, so that
+      validation is not dependent on a person remembering to run it.
+    check: repo.ci_configured
+    severity: high
+    owner: platform-team
+    tags: [sdlc, change-management, observed]
+    frameworks:
+      - framework: SOC2
+        clause: CC8.1
+        title: Change management for infrastructure and software
+      - framework: ISO27001
+        clause: A.8.32
+        title: Change management
+      - framework: PCIDSS
+        clause: "6.2"
+        title: Secure software development
+    narrative: >
+      This control is observed: it looks for a workflow definition under
+      .github/workflows, or a GitLab, Jenkins or CircleCI equivalent. Finding a
+      pipeline definition is not the same as knowing the pipeline passes, or
+      that it runs on the branches that matter. A repository could satisfy this
+      control with a workflow that does nothing. It is a floor, not a ceiling,
+      and SDLC-002 covers whether tests actually exist for it to run.
+
+  - id: SDLC-002
+    narrative_hash: 5ad4707732339ce3
+    title: An automated test suite exists
+    description: >
+      The repository contains tests, so that a regression has a chance of being
+      caught before it reaches production.
+    check: repo.tests_present
+    severity: medium
+    owner: engineering
+    tags: [sdlc, testing, observed]
+    params:
+      paths: [tests]
+      min_files: 3
+    frameworks:
+      - framework: SOC2
+        clause: CC8.1
+        title: Change management for infrastructure and software
+      - framework: ISO27001
+        clause: A.8.28
+        title: Secure coding
+      - framework: PCIDSS
+        clause: "6.2"
+        title: Secure software development
+    narrative: >
+      Observed by counting test_*.py files under tests/. Fewer than three
+      produces a warning rather than a failure, on the reasoning that a token
+      single test file is worse than none because it creates a false impression
+      of coverage. This control counts files and nothing else. It does not
+      measure coverage, assert that the tests pass, or check that they test
+      anything meaningful.
+
+  - id: SDLC-003
+    narrative_hash: bb818965d0109589
+    title: Dependencies are pinned to known versions
+    description: >
+      Dependency declarations carry version constraints so that a build is
+      reproducible and a supply chain change is visible in a diff.
+    check: repo.dependencies_pinned
+    severity: high
+    owner: engineering
+    tags: [sdlc, supply-chain, observed]
+    params:
+      manifests:
+        - requirements.txt
+        - requirements-dev.txt
+    frameworks:
+      - framework: SOC2
+        clause: CC7.1
+        title: Detection of configuration changes and vulnerabilities
+      - framework: ISO27001
+        clause: A.8.8
+        title: Management of technical vulnerabilities
+      - framework: PCIDSS
+        clause: "6.3"
+        title: Identification and management of vulnerabilities
+    narrative: >
+      Observed by reading each dependency manifest and requiring every
+      requirement line to carry a version operator. Without pinning, the code an
+      auditor reviewed and the code that ships next month can differ with no
+      commit to show it. The check skips cleanly when no manifest exists, which
+      matters for repositories that vendor dependencies or use a lockfile format
+      this control does not yet parse.
+
+  - id: SDLC-004
+    narrative_hash: 690f9fc591a4ffda
+    title: The project carries an explicit licence
+    description: >
+      A licence file states what others may do with the code. Its absence is a
+      legal ambiguity, not a neutral default.
+    check: repo.file_present
+    severity: medium
+    owner: engineering
+    tags: [governance, observed]
+    params:
+      any_of:
+        - LICENSE
+        - LICENSE.md
+        - LICENSE.txt
+        - COPYING
+    frameworks:
+      - framework: ISO27001
+        clause: A.5.23
+        title: Information security for cloud services
+    narrative: >
+      Observed by checking for a licence file under any of its common spellings.
+      This is the weakest control in the set from a security standpoint and it
+      is included deliberately, because unlicensed code in a compliance
+      programme is a recurring audit finding and it costs nothing to catch.
+
+  - id: SDLC-005
+    narrative_hash: 552b53328adc9ea0
+    title: A vulnerability disclosure route is published
+    description: >
+      A SECURITY file tells a finder how to report a vulnerability privately,
+      so that the first notice is not a public issue.
+    check: repo.file_present
+    severity: medium
+    owner: security-lead
+    tags: [governance, incident, observed]
+    params:
+      any_of:
+        - SECURITY.md
+        - SECURITY.txt
+        - .github/SECURITY.md
+    frameworks:
+      - framework: SOC2
+        clause: CC7.3
+        title: Evaluation of security events for incident response
+      - framework: ISO27001
+        clause: A.8.8
+        title: Management of technical vulnerabilities
+      - framework: PCIDSS
+        clause: "12.10"
+        title: Incident response readiness
+    narrative: >
+      Observed by checking for a SECURITY file. The value is in reducing the
+      time between someone finding a flaw and the right person hearing about it.
+      The check confirms the file exists; it cannot tell whether the address
+      inside is monitored, which is the part that actually matters.

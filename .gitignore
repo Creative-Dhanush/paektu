@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Secrets: never commit these
+.env
+.env.*
+*.pem
+*.key
+*.p12
+credentials.json
+
+# The evidence store is generated output, not source
+.plumbline/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

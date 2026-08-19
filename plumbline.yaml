@@ -1,0 +1,62 @@
+# Declared security posture.
+#
+# This file holds the facts that cannot be established by reading a repository:
+# what the identity provider enforces, how long logs are kept, when somebody
+# last restored a backup.
+#
+# Two kinds of entry live here, and the difference is load-bearing.
+#
+#   A plain boolean or number is a *declaration*. Somebody typed it. It is the
+#   weakest evidence in the system.
+#
+#   An attestation block adds a name and a date:
+#
+#       access_review:
+#         confirmed: true
+#         attested_by: security-lead
+#         attested_on: 2026-08-15
+#
+#   Controls using the posture.attested check will not accept a bare `true`,
+#   which is how the higher-risk controls are prevented from passing on somebody
+#   ticking a box.
+#
+# Editing this file to make a check pass, without changing the underlying
+# system, is compliance theatre. The tool cannot stop you. It can only make sure
+# the resulting report says "declared" rather than "verified", so that a reader
+# knows exactly how much weight the claim carries.
+
+posture:
+  identity:
+    mfa_enforced: true
+    least_privilege: true
+    privileged_session_hours: 8
+
+    access_review:
+      confirmed: true
+      attested_by: security-lead
+      attested_on: 2026-08-15
+
+  data:
+    encryption_at_rest: true
+    min_tls_version: "1.2"
+
+  logging:
+    retention_days: 180
+
+  monitoring:
+    alerting_enabled: true
+
+  continuity:
+    restore_test:
+      confirmed: true
+      attested_by: platform-team
+      attested_on: 2026-08-02
+
+  incident:
+    response_plan:
+      confirmed: true
+      attested_by: security-lead
+      attested_on: 2026-07-28
+
+  vendor:
+    register_count: 4
