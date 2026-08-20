@@ -1,4 +1,4 @@
-"""Core data types for Plumbline.
+"""Core data types for Paektu.
 
 Three things must stay in agreement for a control to be trustworthy:
 

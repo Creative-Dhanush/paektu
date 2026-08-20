@@ -1,15 +1,15 @@
 """Tests for drift detection and the documentation-drift checks.
 
-These cover the behaviour that distinguishes Plumbline from a linter: a control
+These cover the behaviour that distinguishes Paektu from a linter: a control
 holding a PASS across two runs while its narrative silently diverges.
 """
 
 import pytest
 
-from plumbline import checks
-from plumbline.checks import Target
-from plumbline.drift import compare
-from plumbline.models import CheckResult, Control, RunSummary, Status, fingerprint
+from paektu import checks
+from paektu.checks import Target
+from paektu.drift import compare
+from paektu.models import CheckResult, Control, RunSummary, Status, fingerprint
 
 checks.load_builtins()
 

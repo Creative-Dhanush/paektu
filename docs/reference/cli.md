@@ -36,15 +36,15 @@ error.
 
 ---
 
-## `plumbline check`
+## `paektu check`
 
 Evaluate controls and print the results.
 
 ```bash
-plumbline check
-plumbline check --framework SOC2 --min-severity high
-plumbline check --control SEC-001 --format json
-plumbline check --save-evidence --label pre-release
+paektu check
+paektu check --framework SOC2 --min-severity high
+paektu check --control SEC-001 --format json
+paektu check --save-evidence --label pre-release
 ```
 
 | Flag | Default | Purpose |
@@ -79,14 +79,14 @@ whole point of tracking prose separately.
 
 ---
 
-## `plumbline report`
+## `paektu report`
 
 Produce an audit-facing document.
 
 ```bash
-plumbline report --out posture.md
-plumbline report --format json --out posture.json
-plumbline report --frameworks SOC2,ISO27001
+paektu report --out posture.md
+paektu report --format json --out posture.json
+paektu report --frameworks SOC2,ISO27001
 ```
 
 | Flag | Default | Purpose |
@@ -106,14 +106,14 @@ quarter's report and this one is worth more than typographic polish. Always exit
 
 ---
 
-## `plumbline drift`
+## `paektu drift`
 
 Compare current state against a recorded baseline.
 
 ```bash
-plumbline drift
-plumbline drift --baseline .plumbline/evidence/run-20260819T091402Z-baseline.json
-plumbline drift --format json
+paektu drift
+paektu drift --baseline .paektu/evidence/run-20260819T091402Z-baseline.json
+paektu drift --format json
 ```
 
 | Flag | Default | Purpose |
@@ -139,13 +139,13 @@ precisely why drift is tracked as its own category.
 
 ---
 
-## `plumbline attest`
+## `paektu attest`
 
 Record that you have read a narrative and stand behind it.
 
 ```bash
-plumbline attest SEC-004
-plumbline attest all
+paektu attest SEC-004
+paektu attest all
 ```
 
 | Argument | Default | Purpose |
@@ -165,15 +165,15 @@ ignored.
 
 ---
 
-## `plumbline frameworks`
+## `paektu frameworks`
 
 Inspect clause coverage and the crosswalk.
 
 ```bash
-plumbline frameworks --list
-plumbline frameworks SOC2
-plumbline frameworks ISO27001 --format json
-plumbline frameworks
+paektu frameworks --list
+paektu frameworks SOC2
+paektu frameworks ISO27001 --format json
+paektu frameworks
 ```
 
 | Argument | Purpose |
@@ -198,13 +198,13 @@ this control set talks about, and it is not a compliance claim.
 
 ---
 
-## `plumbline verify`
+## `paektu verify`
 
 Re-hash stored evidence and detect tampering.
 
 ```bash
-plumbline verify
-plumbline verify --path /some/repo
+paektu verify
+paektu verify --path /some/repo
 ```
 
 Walks the evidence manifest, recomputes each artifact's hash, and reports any that
@@ -215,7 +215,7 @@ changed after recording, and a manifest entry whose file has gone missing.
 
 ---
 
-## `plumbline checks`
+## `paektu checks`
 
 List every registered check with its one-line summary. No flags. Useful when
 writing a control and you need the exact check name.
@@ -239,12 +239,12 @@ jobs:
           python-version: "3.12"
       - run: pip install -e .
       - name: Verify evidence integrity
-        run: plumbline verify
+        run: paektu verify
       - name: Check posture
-        run: plumbline check --strict
+        run: paektu check --strict
       - name: Publish report
         if: always()
-        run: plumbline report --out posture.md
+        run: paektu report --out posture.md
       - uses: actions/upload-artifact@v4
         if: always()
         with:

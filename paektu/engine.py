@@ -17,7 +17,7 @@ from . import checks
 from .checks import Target
 from .models import CheckResult, Control, RunSummary, Status, utcnow
 
-DEFAULT_POSTURE_FILE = "plumbline.yaml"
+DEFAULT_POSTURE_FILE = "paektu.yaml"
 
 
 class EngineError(RuntimeError):

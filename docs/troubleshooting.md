@@ -2,16 +2,16 @@
 
 Things that go wrong, why, and what to do.
 
-## `plumbline: command not found`
+## `paektu: command not found`
 
 The console script was not installed or is not on your PATH.
 
 ```bash
 pip install -e .
-python -m plumbline check
+python -m paektu check
 ```
 
-`python -m plumbline` is equivalent and does not depend on PATH. Prefer it inside
+`python -m paektu` is equivalent and does not depend on PATH. Prefer it inside
 CI, where PATH after a `pip install` is not always what you expect.
 
 ## `error: no controls found in .../controls`
@@ -19,7 +19,7 @@ CI, where PATH after a `pip install` is not always what you expect.
 You are not in the repository root, or `--controls` points somewhere empty.
 
 ```bash
-plumbline check --controls /path/to/controls
+paektu check --controls /path/to/controls
 ```
 
 Exits `2` rather than `0`, because a run with nothing to check is a broken
@@ -31,8 +31,8 @@ Your filters combine with AND and eliminated everything. Common cause is a
 framework name that does not appear in any control:
 
 ```bash
-plumbline frameworks --list          # what exists
-plumbline frameworks                 # the full crosswalk
+paektu frameworks --list          # what exists
+paektu frameworks                 # the full crosswalk
 ```
 
 Also exits `2`. A vacuous pass would be worse than an error.
@@ -61,14 +61,14 @@ passing result while a failing one exists.
 A typo in the `check:` field, or a check that was never registered.
 
 ```bash
-plumbline checks
+paektu checks
 ```
 
 If you wrote a new check and it does not appear, it is not being imported. Checks
-must live in `plumbline/checks/repo.py`, `posture.py` or `docs.py` — those are the
+must live in `paektu/checks/repo.py`, `posture.py` or `docs.py` — those are the
 three modules `load_builtins()` imports.
 
-## A control fails with "not declared in plumbline.yaml"
+## A control fails with "not declared in paektu.yaml"
 
 The posture key is missing. Note the nesting: `identity.mfa_enforced` means
 
@@ -118,7 +118,7 @@ Editing the narrative changes its fingerprint. Fixing the words is not the same 
 attesting them:
 
 ```bash
-plumbline attest SEC-004
+paektu attest SEC-004
 ```
 
 The tool will never attest on your behalf. The fingerprint means "a person read
@@ -130,21 +130,21 @@ It should not. Fingerprints are computed over whitespace-normalised text, so
 rewrapping is invisible. If you saw drift, a word changed too — try
 `git diff` on the control file and read carefully. Punctuation counts.
 
-## `plumbline drift` says there are no stored runs
+## `paektu drift` says there are no stored runs
 
 Drift needs a baseline:
 
 ```bash
-plumbline check --save-evidence --label baseline
+paektu check --save-evidence --label baseline
 ```
 
-Artifacts land in `.plumbline/evidence/`, which is gitignored because it is
+Artifacts land in `.paektu/evidence/`, which is gitignored because it is
 generated output. That has a consequence worth knowing: **CI has no baseline
 unless you provide one.** Either commit a baseline artifact deliberately, or cache
 the directory between runs, or accept that `drift` is a local command and rely on
 `check --strict` in CI.
 
-## `plumbline verify` reports "contents changed after recording"
+## `paektu verify` reports "contents changed after recording"
 
 An evidence artifact was edited after it was written. If that was you, the run is
 no longer trustworthy — delete it and record a fresh one. If it was not you, that
@@ -178,7 +178,7 @@ narrative no longer describes the system. That gap is the reason the tool exists
 Two usual causes.
 
 **`--strict`.** If CI uses it and you did not, warnings and narrative drift block
-there but not locally. Run `plumbline check --strict` before pushing.
+there but not locally. Run `paektu check --strict` before pushing.
 
 **Untracked files.** Observed checks read the working tree, so a `LICENSE` you
 created but never committed passes locally and fails in CI. Run `git status` before
@@ -193,6 +193,6 @@ separate category and why it blocks independently of the score.
 ## Still stuck
 
 Open an issue at
-<https://github.com/Creative-Dhanush/plumbline/issues> with the command you ran,
+<https://github.com/Creative-Dhanush/paektu/issues> with the command you ran,
 the output, and your Python version. For anything security-sensitive, read
 [SECURITY.md](../SECURITY.md) first and report privately instead.

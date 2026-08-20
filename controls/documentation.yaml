@@ -1,6 +1,6 @@
 # Documentation controls.
 #
-# This file is the reason Plumbline exists as something other than a linter.
+# This file is the reason Paektu exists as something other than a linter.
 #
 # A control set can be entirely green while the prose describing it is a year
 # stale, and an auditor reading that prose is being misled by a system that

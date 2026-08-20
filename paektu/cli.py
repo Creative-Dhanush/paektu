@@ -135,7 +135,7 @@ def cmd_drift(args) -> int:
         if baseline is None:
             print(
                 "error: no stored runs to compare against.\n"
-                "       record one first with: plumbline check --save-evidence",
+                "       record one first with: paektu check --save-evidence",
                 file=sys.stderr,
             )
             return EXIT_ERROR
@@ -289,13 +289,13 @@ def cmd_checks(args) -> int:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="plumbline",
+        prog="paektu",
         description=(
             "Security controls as code. Runs checks, collects evidence, and flags "
             "documentation that has drifted away from the system it describes."
         ),
     )
-    parser.add_argument("--version", action="version", version=f"plumbline {__version__}")
+    parser.add_argument("--version", action="version", version=f"paektu {__version__}")
     sub = parser.add_subparsers(dest="command", required=True)
 
     def add_common(p, with_filters: bool = True) -> None:

@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Plumbline are recorded here. The format follows
+All notable changes to Paektu are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project uses
 [semantic versioning](https://semver.org/spec/v2.0.0.html).
 
@@ -46,8 +46,8 @@ or attested), `docs.*` (observed).
 `attested_by` and `attested_on`. Used by the controls where a tickbox is not good
 enough: access reviews, restore tests and incident response plans.
 
-**Append-only evidence store** under `.plumbline/evidence/`, with a manifest and
-a content hash per run. `plumbline verify` re-hashes every artifact and reports
+**Append-only evidence store** under `.paektu/evidence/`, with a manifest and
+a content hash per run. `paektu verify` re-hashes every artifact and reports
 tampering, missing files, and manifest disagreement.
 
 **Drift comparison** across four categories, because each demands a different
@@ -86,5 +86,5 @@ Recorded here rather than left for a user to discover.
 - The evidence store is gitignored, so CI has no baseline for `drift` unless one is
   committed or cached deliberately.
 
-[Unreleased]: https://github.com/Creative-Dhanush/plumbline/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/Creative-Dhanush/plumbline/releases/tag/v0.1.0
+[Unreleased]: https://github.com/Creative-Dhanush/paektu/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/Creative-Dhanush/paektu/releases/tag/v0.1.0

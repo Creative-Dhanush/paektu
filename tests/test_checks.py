@@ -2,9 +2,9 @@
 
 import pytest
 
-from plumbline import checks
-from plumbline.checks import Target
-from plumbline.models import Control, Status
+from paektu import checks
+from paektu.checks import Target
+from paektu.models import Control, Status
 
 checks.load_builtins()
 

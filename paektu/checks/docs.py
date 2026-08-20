@@ -1,6 +1,6 @@
 """Checks that hold documentation to the same standard as code.
 
-This is the part of Plumbline that does not exist in most compliance tooling.
+This is the part of Paektu that does not exist in most compliance tooling.
 A control can be technically satisfied while the prose describing it is a year
 out of date, and an auditor reading that prose is being misled by a system that
 reports itself green.
@@ -31,7 +31,7 @@ def narrative_current(control, target: Target):
             control,
             Status.FAIL,
             "control has no narrative",
-            remediation=f"write a narrative for {control.id}, then run: plumbline attest {control.id}",
+            remediation=f"write a narrative for {control.id}, then run: paektu attest {control.id}",
         )
 
     current = fingerprint(control.narrative)
@@ -53,7 +53,7 @@ def narrative_current(control, target: Target):
             control,
             Status.WARN,
             "narrative exists but has never been attested",
-            remediation=f"review the text and run: plumbline attest {control.id}",
+            remediation=f"review the text and run: paektu attest {control.id}",
             evidence=evidence,
         )
 
@@ -62,7 +62,7 @@ def narrative_current(control, target: Target):
             control,
             Status.FAIL,
             f"narrative changed since attestation ({control.narrative_hash} -> {current})",
-            remediation=f"re-review the narrative and run: plumbline attest {control.id}",
+            remediation=f"re-review the narrative and run: paektu attest {control.id}",
             evidence=evidence,
         )
 

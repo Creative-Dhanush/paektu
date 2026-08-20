@@ -4,10 +4,10 @@ import json
 
 import pytest
 
-from plumbline import engine, registry
-from plumbline.evidence import EvidenceStore
-from plumbline.frameworks import canonical, coverage, crosswalk
-from plumbline.models import Control, Status
+from paektu import engine, registry
+from paektu.evidence import EvidenceStore
+from paektu.frameworks import canonical, coverage, crosswalk
+from paektu.models import Control, Status
 
 VALID = """
 controls:
@@ -166,7 +166,7 @@ class TestEngine:
 
     def test_a_raising_check_does_not_abort_the_run(self, tmp_path):
         """One broken plugin must not cost the whole pass."""
-        from plumbline import checks
+        from paektu import checks
 
         @checks.register("test.explodes")
         def explodes(control, target):
@@ -188,7 +188,7 @@ class TestEngine:
         assert engine.load_posture(tmp_path) == {}
 
     def test_reads_a_posture_file(self, tmp_path):
-        (tmp_path / "plumbline.yaml").write_text(
+        (tmp_path / "paektu.yaml").write_text(
             "posture:\n  a:\n    b: true\n", encoding="utf-8"
         )
         assert engine.load_posture(tmp_path) == {"a": {"b": True}}
@@ -328,7 +328,7 @@ class TestShippedControlSet:
     def test_every_shipped_control_names_a_registered_check(self):
         from pathlib import Path
 
-        from plumbline import checks
+        from paektu import checks
 
         checks.load_builtins()
         controls_dir = Path(__file__).resolve().parent.parent / "controls"

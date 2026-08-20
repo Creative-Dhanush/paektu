@@ -23,7 +23,7 @@ function. Most of the time you only need the first.
       clause: "10.5"
       title: Audit log retention
   narrative: >
-    Retention is declared in plumbline.yaml and compared against a ninety day
+    Retention is declared in paektu.yaml and compared against a ninety day
     floor. Ninety days is chosen because PCI DSS requires three months of
     immediately available logs. This control checks the declared figure and
     cannot confirm logs are actually present for that whole window.
@@ -42,7 +42,7 @@ function. Most of the time you only need the first.
 | `params` | no | Passed to the check. Shape depends on the check. |
 | `frameworks` | no | Clause citations. Drives coverage reporting. |
 | `narrative` | no | Prose for the auditor. Fingerprinted. |
-| `narrative_hash` | no | Written by `plumbline attest`, not by hand. |
+| `narrative_hash` | no | Written by `paektu attest`, not by hand. |
 
 Files live in `controls/` and are grouped by theme. Grouping is cosmetic; the
 loader reads every `.yaml` and `.yml` in the directory tree.
@@ -52,7 +52,7 @@ one name means a report can cite a passing result while a failing one exists.
 
 ## Choosing a check
 
-Run `plumbline checks` for the live list. Three families ship:
+Run `paektu checks` for the live list. Three families ship:
 
 ### Repository checks — observed
 
@@ -69,7 +69,7 @@ These read files. Strongest evidence available, because a machine looked.
 
 ### Posture checks — declared
 
-These read `plumbline.yaml` for facts a repository cannot prove.
+These read `paektu.yaml` for facts a repository cannot prove.
 
 | Check | Params | Asks |
 | --- | --- | --- |
@@ -99,7 +99,7 @@ The narrative is what an auditor reads. Three things make it useful:
 
 **Say whether the fact was observed or declared.** This is the single most
 valuable sentence you can write. "Observed by reading .gitignore" and "declared in
-plumbline.yaml" tell a reader precisely how much weight to give the pass.
+paektu.yaml" tell a reader precisely how much weight to give the pass.
 
 **State the limits.** Every check has them. A narrative admitting that a
 regex-based secret scanner misses git history is more trustworthy than one
@@ -126,7 +126,7 @@ from . import Target, register, result
 
 @register("repo.readme_mentions_security")
 def readme_mentions_security(control, target: Target):
-    """One-line summary. Shown by `plumbline checks`."""
+    """One-line summary. Shown by `paektu checks`."""
     body = target.read("README.md")
     if not body:
         return result(control, Status.SKIP, "no README.md to inspect")
@@ -155,7 +155,7 @@ def readme_mentions_security(control, target: Target):
     )
 ```
 
-Put it in `plumbline/checks/repo.py`, `posture.py` or `docs.py`. The decorator
+Put it in `paektu/checks/repo.py`, `posture.py` or `docs.py`. The decorator
 registers it; `load_builtins()` imports those three modules, so nothing else needs
 to change.
 
@@ -195,9 +195,9 @@ becomes a permanent backlog item.
 ## Verifying your work
 
 ```bash
-plumbline checks                     # is it registered?
-plumbline check --control YOUR-ID    # does it behave?
-plumbline check --control YOUR-ID --format json
+paektu checks                     # is it registered?
+paektu check --control YOUR-ID    # does it behave?
+paektu check --control YOUR-ID --format json
 python -m pytest
 ```
 

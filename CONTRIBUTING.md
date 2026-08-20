@@ -3,8 +3,8 @@
 ## Setup
 
 ```bash
-git clone https://github.com/Creative-Dhanush/plumbline
-cd plumbline
+git clone https://github.com/Creative-Dhanush/paektu
+cd paektu
 pip install -e ".[dev]"
 python -m pytest
 ```
@@ -17,7 +17,7 @@ no business dragging in a large dependency tree.
 
 ```bash
 python -m pytest              # all tests pass
-plumbline check --strict      # the repo satisfies its own controls
+paektu check --strict      # the repo satisfies its own controls
 ```
 
 Both run in CI. The second one matters: if this tool cannot hold itself to its own
@@ -26,7 +26,7 @@ controls, it has no business being pointed at anyone else's code.
 If you changed a control narrative, attest it:
 
 ```bash
-plumbline attest CONTROL-ID
+paektu attest CONTROL-ID
 ```
 
 Otherwise `DOC-001` will flag the drift and `--strict` will fail the build. That is
@@ -36,7 +36,7 @@ the feature working, not a nuisance.
 
 See [`docs/guides/writing-controls.md`](docs/guides/writing-controls.md) for the
 full walkthrough. Briefly: a check is one decorated function in
-`plumbline/checks/repo.py`, `posture.py` or `docs.py`, returning a `CheckResult`.
+`paektu/checks/repo.py`, `posture.py` or `docs.py`, returning a `CheckResult`.
 
 A new check needs three things alongside it:
 
@@ -44,7 +44,7 @@ A new check needs three things alongside it:
    synthetic repository rather than asserting against this one.
 2. **A row in `docs/reference/checks.md`** including what it does *not* prove.
    That column is the most useful part of the document.
-3. **A one-line docstring**, because `plumbline checks` prints it.
+3. **A one-line docstring**, because `paektu checks` prints it.
 
 ## Adding a control
 

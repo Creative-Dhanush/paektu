@@ -46,7 +46,7 @@ controls:
       not been made, not as proof the repository is clean.
 
   - id: SEC-002
-    narrative_hash: 060816af5a442329
+    narrative_hash: 8c1d3ab6e1eba458
     title: Data is encrypted at rest
     description: >
       Persistent stores holding customer or personal data use encryption at
@@ -73,12 +73,12 @@ controls:
     narrative: >
       Every persistent store holding personal data is encrypted at rest using
       keys managed by the cloud provider's key service. The evidence is declared
-      in plumbline.yaml. Verifying it properly means querying the storage
+      in paektu.yaml. Verifying it properly means querying the storage
       provider, which this tool deliberately does not do, so the control is a
       record of the organisation's position rather than an observation.
 
   - id: SEC-003
-    narrative_hash: 0844bf7461a1f909
+    narrative_hash: 9034e7d4af403cc5
     title: Data is encrypted in transit
     description: >
       All network traffic carrying customer data uses TLS 1.2 or higher.
@@ -103,14 +103,14 @@ controls:
         clause: 164.312(e)(1)
         title: Transmission security
     narrative: >
-      The minimum accepted TLS version is declared in plumbline.yaml and checked
+      The minimum accepted TLS version is declared in paektu.yaml and checked
       against an allowed set of 1.2 and 1.3. Anything older fails, including
       TLS 1.1, which is no longer considered adequate by any framework cited
       here. The check verifies the declared floor, not the actual negotiated
       version on any given connection.
 
   - id: SEC-004
-    narrative_hash: b716408a8fb5eaf5
+    narrative_hash: eb3deb21654b61fc
     title: Audit logs are retained long enough to investigate an incident
     description: >
       Security-relevant logs are kept for at least ninety days so that an
@@ -136,7 +136,7 @@ controls:
         clause: 164.312(b)
         title: Audit controls
     narrative: >
-      Retention is declared in plumbline.yaml and compared against a ninety day
+      Retention is declared in paektu.yaml and compared against a ninety day
       floor. Ninety days is chosen because PCI DSS requires three months of
       immediately available logs, and because the gap between a breach and its
       discovery is frequently longer than a month. Organisations under GDPR

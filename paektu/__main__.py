@@ -1,4 +1,4 @@
-"""Entry point so the tool runs as `python -m plumbline`."""
+"""Entry point so the tool runs as `python -m paektu`."""
 
 import sys
 

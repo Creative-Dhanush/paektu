@@ -1,12 +1,12 @@
-# Plumbline
+# Paektu
 
 Security controls as code, with evidence collection and documentation drift
 detection.
 
-A plumb line is the reference you hold something against to check whether it is
-true. That is the job here: state what your controls require, check them
-mechanically, and keep the written record honest about how each fact was
-established.
+Paektu is the highest peak on the Korean peninsula: the fixed landmark you take
+your bearings from when everything else on the horizon has moved. That is the job
+here. State what your controls require, check them mechanically, and keep the
+written record honest about how each fact was established.
 
 ## Why this exists
 
@@ -20,7 +20,7 @@ paragraph describing it slowly stops being true. Nothing notices, because nothin
 is watching the prose. The dashboard is green while the document a human relies
 on has quietly become fiction.
 
-Plumbline treats the narrative as a control surface with its own evidence and its
+Paektu treats the narrative as a control surface with its own evidence and its
 own failure modes. Each control records the fingerprint of the narrative text a
 person last reviewed. Change the words without re-attesting and the control is
 flagged, even though the underlying check still passes:
@@ -34,7 +34,7 @@ scaffolding to make it useful.
 
 ## The trust model
 
-The most important idea in Plumbline is that not all evidence is equal, and the
+The most important idea in Paektu is that not all evidence is equal, and the
 tool refuses to pretend otherwise. Every result is labelled with how the fact was
 established:
 
@@ -47,7 +47,7 @@ established:
 **Observed** controls read files: committed secrets, unpinned dependencies, a
 missing licence, absent CI, documentation pages that do not exist.
 
-**Declared** controls read `plumbline.yaml`, which holds the facts a repository
+**Declared** controls read `paektu.yaml`, which holds the facts a repository
 cannot prove — whether MFA is enforced at the identity provider, how long logs
 are retained.
 

@@ -1,6 +1,6 @@
 # Check reference
 
-Every check that ships with Plumbline, what it actually proves, and what it does
+Every check that ships with Paektu, what it actually proves, and what it does
 not.
 
 The last column matters most. A check's limits determine how much weight a pass
@@ -130,7 +130,7 @@ nobody will `git add --force` past it. Preventive companion to the detective
 
 ## Posture checks
 
-Read `plumbline.yaml`. These cover facts a repository cannot establish: what the
+Read `paektu.yaml`. These cover facts a repository cannot establish: what the
 identity provider enforces, how long logs are kept, when a backup was last
 restored.
 

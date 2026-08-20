@@ -21,7 +21,7 @@ htmlcov/
 credentials.json
 
 # The evidence store is generated output, not source
-.plumbline/
+.paektu/
 
 # Editors and OS
 .vscode/

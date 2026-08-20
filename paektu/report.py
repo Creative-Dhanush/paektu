@@ -207,7 +207,7 @@ def markdown_report(
     out.append("")
     out.append(
         "Every hash above is a SHA-256 prefix over the collected detail payload. "
-        "Re-running `plumbline check` on an unchanged target reproduces them."
+        "Re-running `paektu check` on an unchanged target reproduces them."
     )
     out.append("")
 

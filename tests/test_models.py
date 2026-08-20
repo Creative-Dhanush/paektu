@@ -2,7 +2,7 @@
 
 import pytest
 
-from plumbline.models import (
+from paektu.models import (
     CheckResult,
     Control,
     Evidence,

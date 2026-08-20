@@ -10,18 +10,18 @@ Python 3.10 or newer. The only runtime dependency is PyYAML.
 ## Install
 
 ```bash
-git clone https://github.com/Creative-Dhanush/plumbline
-cd plumbline
+git clone https://github.com/Creative-Dhanush/paektu
+cd paektu
 pip install -e .
 ```
 
 Confirm it landed:
 
 ```bash
-plumbline --version
+paektu --version
 ```
 
-If `plumbline` is not on your PATH, `python -m plumbline` works identically and
+If `paektu` is not on your PATH, `python -m paektu` works identically and
 is the safer form inside CI.
 
 ## 1. Run your first check
@@ -29,7 +29,7 @@ is the safer form inside CI.
 From the repository root:
 
 ```bash
-plumbline check
+paektu check
 ```
 
 ```
@@ -54,15 +54,15 @@ drifted. A control can be technically satisfied and still not be presentable.
 ## 2. Narrow the run
 
 ```bash
-plumbline check --framework SOC2         # only controls citing SOC 2
-plumbline check --min-severity high      # skip the low-stakes ones
-plumbline check --control SEC-001        # one control
-plumbline check --tag observed           # only machine-verified controls
+paektu check --framework SOC2         # only controls citing SOC 2
+paektu check --min-severity high      # skip the low-stakes ones
+paektu check --control SEC-001        # one control
+paektu check --tag observed           # only machine-verified controls
 ```
 
 The last one is worth knowing. Controls tagged `observed` are the ones a machine
 actually verified, as opposed to those resting on a declaration in
-`plumbline.yaml`. When someone asks what you can genuinely prove, that is the
+`paektu.yaml`. When someone asks what you can genuinely prove, that is the
 filter to reach for.
 
 ## 3. Record a baseline
@@ -70,10 +70,10 @@ filter to reach for.
 Drift detection needs something to compare against:
 
 ```bash
-plumbline check --save-evidence --label baseline
+paektu check --save-evidence --label baseline
 ```
 
-This writes a timestamped JSON artifact under `.plumbline/evidence/` and adds it
+This writes a timestamped JSON artifact under `.paektu/evidence/` and adds it
 to a manifest. Runs are append-only: nothing here rewrites or deletes a previous
 one, because a compliance tool that can quietly revise its own history is not
 worth much as a source of truth.
@@ -87,7 +87,7 @@ change SEC-004's narrative from `ninety day floor` to `thirty day floor`.
 Now re-run:
 
 ```bash
-plumbline check --control SEC-004
+paektu check --control SEC-004
 ```
 
 ```
@@ -106,7 +106,7 @@ To resolve it, read the new wording, decide whether you stand behind it, and
 attest:
 
 ```bash
-plumbline attest SEC-004
+paektu attest SEC-004
 ```
 
 ```
@@ -120,7 +120,7 @@ worthless.
 ## 5. Compare against the baseline
 
 ```bash
-plumbline drift
+paektu drift
 ```
 
 ```
@@ -139,7 +139,7 @@ posture score, which is exactly why it needs its own category.
 ## 6. Produce an audit-facing report
 
 ```bash
-plumbline report --out posture.md
+paektu report --out posture.md
 ```
 
 Markdown rather than PDF, because Markdown diffs. Being able to see what changed
@@ -153,7 +153,7 @@ is the one the tool actually produced.
 
 ```yaml
 - name: Compliance posture
-  run: plumbline check --strict
+  run: paektu check --strict
 ```
 
 Exit codes are the contract:

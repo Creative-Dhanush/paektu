@@ -43,14 +43,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e .
 
-      # Plumbline checks its own repository. If the tool cannot hold itself to
+      # Paektu checks its own repository. If the tool cannot hold itself to
       # its own controls, it has no business being pointed at anyone else's code.
       - name: Check posture
-        run: plumbline check --strict
+        run: paektu check --strict
 
       - name: Generate report
         if: always()
-        run: plumbline report --out posture.md
+        run: paektu report --out posture.md
 
       # Uploaded even on failure, because the run you most want a report from is
       # the one that just failed.

@@ -2,7 +2,7 @@
 
 Some controls cannot be proven by reading a repository: whether MFA is enforced
 on the identity provider, how long logs are retained, when access was last
-reviewed. Those live in `plumbline.yaml`, a document the organisation maintains
+reviewed. Those live in `paektu.yaml`, a document the organisation maintains
 deliberately.
 
 A declaration is weaker evidence than an observation, and the tool says so.
@@ -24,7 +24,7 @@ def _declared(control, key: str, value: Any, extra: dict[str, Any] | None = None
         "key": key,
         "value": value,
         "evidence_type": "declared",
-        "source": "plumbline.yaml",
+        "source": "paektu.yaml",
     }
     if extra:
         detail.update(extra)
@@ -53,7 +53,7 @@ def is_true(control, target: Target):
         return result(
             control,
             Status.FAIL,
-            f"{key} is not declared in plumbline.yaml",
+            f"{key} is not declared in paektu.yaml",
             remediation=f"declare {key}: true once the control is genuinely in place",
             evidence=evidence,
         )
@@ -229,7 +229,7 @@ def attested(control, target: Target):
                 "attested_by": who,
                 "attested_on": when,
                 "evidence_type": "attested",
-                "source": "plumbline.yaml",
+                "source": "paektu.yaml",
             },
         )
     ]

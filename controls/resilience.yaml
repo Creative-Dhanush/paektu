@@ -33,7 +33,7 @@ controls:
       succeeded or that the recovered data was correct.
 
   - id: RES-002
-    narrative_hash: 0a5bef4f13e29883
+    narrative_hash: dd38f5d352024905
     title: Security events are monitored and alerted on
     description: >
       Security-relevant events reach a person or a system that will act on them.
@@ -57,7 +57,7 @@ controls:
         clause: 164.312(b)
         title: Audit controls
     narrative: >
-      Declared in plumbline.yaml. Alerting is the difference between logging and
+      Declared in paektu.yaml. Alerting is the difference between logging and
       monitoring: logs that nobody reads satisfy a retention requirement while
       providing no detection at all. SEC-004 covers how long logs are kept, and
       this control covers whether anything watches them. Both are declarations

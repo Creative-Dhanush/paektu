@@ -1,6 +1,6 @@
 # Documentation drift
 
-The reasoning behind the one mechanism that makes Plumbline different from a
+The reasoning behind the one mechanism that makes Paektu different from a
 compliance linter.
 
 ## The failure this addresses
@@ -39,7 +39,7 @@ person last reviewed:
     key: logging.retention_days
     minimum: 90
   narrative: >
-    Retention is declared in plumbline.yaml and compared against a ninety day
+    Retention is declared in paektu.yaml and compared against a ninety day
     floor, chosen because PCI DSS requires three months of immediately available
     logs.
   narrative_hash: 3f9a2b1c8d7e6f50
@@ -54,14 +54,14 @@ whether its check passed.
 Fingerprints are computed over whitespace-normalised text, so this is not drift:
 
 ```
-Retention is declared in plumbline.yaml
+Retention is declared in paektu.yaml
     and compared against a ninety day floor.
 ```
 
 while this is:
 
 ```
-Retention is declared in plumbline.yaml and compared against a thirty day floor.
+Retention is declared in paektu.yaml and compared against a thirty day floor.
 ```
 
 Reformatting is not a documentation change. Changing a number is. A drift
@@ -89,7 +89,7 @@ find.
 Resolving drift is one command:
 
 ```bash
-plumbline attest SEC-004
+paektu attest SEC-004
 ```
 
 ```
@@ -101,7 +101,7 @@ the fingerprint's entire meaning is *"a person read these words and stands behin
 them"*. A tool that could attest for you would be recording a fact about itself,
 not about anyone's judgement, and the mechanism would be theatre.
 
-For the same reason `plumbline attest` writes a targeted line edit into the YAML
+For the same reason `paektu attest` writes a targeted line edit into the YAML
 rather than re-serialising the file. Round-tripping through a YAML dumper would
 reflow comments and reorder keys, producing a diff nobody can review — and an
 unreviewable diff in the middle of an attestation workflow defeats the purpose.
@@ -109,7 +109,7 @@ unreviewable diff in the middle of an attestation workflow defeats the purpose.
 To attest everything currently stale or unreviewed:
 
 ```bash
-plumbline attest all
+paektu attest all
 ```
 
 Use that sparingly. Attesting twenty narratives in one command is a fair signal
@@ -117,7 +117,7 @@ that nobody read them.
 
 ## Drift is not a score regression
 
-This is the subtle part, and it drove the design of `plumbline drift`.
+This is the subtle part, and it drove the design of `paektu drift`.
 
 A documentation regression does not move the posture score. The control still
 passes. If you only track the score you will never see it:
@@ -161,7 +161,7 @@ people learn to ignore.
 - **It cannot detect drift in prose it does not hold.** If your real
   documentation lives in a wiki and the control narrative is a summary, the
   fingerprint tracks the summary. The wiki can rot untouched.
-- **Attestation is only as good as the review.** `plumbline attest all` after
+- **Attestation is only as good as the review.** `paektu attest all` after
   skimming is indistinguishable, to the tool, from a careful reading.
 - **`docs.evidence_explained` is a keyword search.** It looks for words like
   *observed*, *declared* and *verified*. Easy to satisfy without meaning it. Its

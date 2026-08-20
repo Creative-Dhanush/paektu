@@ -18,7 +18,7 @@ from typing import Any
 
 from .models import RunSummary, fingerprint, utcnow
 
-DEFAULT_STORE = ".plumbline/evidence"
+DEFAULT_STORE = ".paektu/evidence"
 MANIFEST_NAME = "manifest.json"
 
 
