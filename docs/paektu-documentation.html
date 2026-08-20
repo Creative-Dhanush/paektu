@@ -387,6 +387,10 @@
     color: var(--ink-faint);
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
   @media (max-width: 900px) {
     .shell { grid-template-columns: 1fr; }
     nav.toc {
@@ -401,6 +405,109 @@
     nav.toc .brand, nav.toc .ver { column-span: all; }
     main { padding: 26px 22px 70px; }
   }
+  /* ---------- print / PDF ----------
+     Pins the light palette regardless of the viewer's theme, turns the sidebar
+     into a cover-and-contents page, and keeps tables, terminal blocks and
+     callouts from being split across a page boundary. */
+  @media print {
+    :root,
+    :root[data-theme="dark"],
+    :root:not([data-theme="light"]) {
+      --ground:      #FFFFFF;
+      --surface:     #FFFFFF;
+      --surface-alt: #F1F4F8;
+      --ink:         #111418;
+      --ink-soft:    #414A55;
+      --ink-faint:   #6B7683;
+      --rule:        #C9D2DC;
+      --rule-soft:   #DFE5EC;
+      --accent:      #24406E;
+      --accent-soft: #EDF1F8;
+      --contour:     #9FAEC2;
+      --pass:        #15653B;
+      --warn:        #8F5F16;
+      --fail:        #911E18;
+      --pass-bg:     #E7F2EB;
+      --warn-bg:     #FAF1DF;
+      --fail-bg:     #FBEAE8;
+      --term-bg:     #12161C;
+      --term-ink:    #DCE2EA;
+      --term-rule:   #2A313B;
+      --shadow:      none;
+    }
+
+    /* Keep the dark terminal blocks, pills and table headers rather than
+       letting the print engine flatten them to white. */
+    * {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    @page { size: A4; margin: 15mm 14mm 16mm; }
+
+    body { background: #FFFFFF; font-size: 10.4pt; line-height: 1.52; }
+
+    .shell { display: block; max-width: none; }
+    main { padding: 0; }
+    .col { max-width: none; }
+
+    /* The sidebar becomes a cover page: name, version, then the contents. */
+    nav.toc {
+      position: static;
+      max-height: none;
+      overflow: visible;
+      border-right: 0;
+      padding: 26mm 0 0;
+      font-size: 10pt;
+      break-after: page;
+      /* Cancel the narrow-viewport rule further down: headless print reports a
+         narrow viewport, so its `columns: 2` nests inside .contents-wrap and
+         silently yields four columns. */
+      columns: auto;
+    }
+    nav.toc .brand { font-size: 46pt; font-weight: 500; letter-spacing: -.02em; }
+    nav.toc .ver { font-size: 9pt; margin-bottom: 4mm; }
+    nav.toc .brand + .ver::after {
+      content: " \00B7  COMPLETE DOCUMENTATION";
+      color: var(--accent);
+    }
+    nav.toc .grp { break-after: avoid; margin: 6mm 0 1.5mm; }
+    nav.toc a {
+      border-left: 0;
+      margin-left: 0;
+      padding: 1mm 0 1mm 0;
+      color: var(--ink);
+      text-decoration: none;
+      break-inside: avoid;
+    }
+    .contents-wrap { columns: 2; column-gap: 12mm; }
+
+    section { padding-top: 7mm; }
+    section + section { margin-top: 7mm; }
+
+    /* Never orphan a heading at the foot of a page. */
+    h1, h2, h3, h4 { break-after: avoid; }
+    h2 { font-size: 20pt; }
+    h3 { font-size: 12pt; }
+    h4 { font-size: 11pt; }
+
+    /* Atomic blocks: splitting these mid-way makes them unreadable. */
+    .tw, .term, pre.code, .note, .scene, .factbar, footer, tr {
+      break-inside: avoid;
+    }
+    thead { display: table-header-group; }
+
+    table { font-size: 8.8pt; }
+    th, td { padding: 5px 8px; }
+    .term pre, pre.code { font-size: 8.2pt; line-height: 1.5; padding: 9px 11px; }
+    .term-hd { font-size: 8pt; padding: 5px 11px; }
+
+    a { color: var(--accent); text-decoration: none; }
+    .contour { height: 26px; }
+    h1 { font-size: 30pt; }
+    .standfirst { font-size: 12pt; }
+  }
+
 </style>
 
 <div class="shell">
@@ -409,6 +516,7 @@
     <p class="brand">Paektu</p>
     <p class="ver">v0.1.0 &middot; APACHE-2.0</p>
 
+    <div class="contents-wrap">
     <p class="grp">Orientation</p>
     <a href="#what">What it is</a>
     <a href="#why">Why it exists</a>
@@ -439,6 +547,7 @@
     <p class="grp">Honesty</p>
     <a href="#limits">Limitations</a>
     <a href="#links">Links</a>
+    </div>
   </nav>
 
   <main>
