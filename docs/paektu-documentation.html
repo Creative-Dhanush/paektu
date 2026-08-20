@@ -1,0 +1,1360 @@
+<title>Paektu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+  /* ---------- tokens: complete light palette on bare :root ---------- */
+  :root {
+    --ground:      #F6F7F9;
+    --surface:     #FFFFFF;
+    --surface-alt: #EEF1F5;
+    --ink:         #111418;
+    --ink-soft:    #414A55;
+    --ink-faint:   #6B7683;
+    --rule:        #D5DCE4;
+    --rule-soft:   #E4E9EF;
+    --accent:      #2B4B7E;
+    --accent-soft: #EAEFF7;
+    --contour:     #A8B6C9;
+    --pass:        #1B7F4B;
+    --warn:        #B4791F;
+    --fail:        #B3261E;
+    --pass-bg:     #E7F2EB;
+    --warn-bg:     #FAF1DF;
+    --fail-bg:     #FBEAE8;
+    --term-bg:     #12161C;
+    --term-ink:    #D8DEE7;
+    --term-rule:   #262D37;
+    --shadow:      0 1px 2px rgba(17, 20, 24, .05), 0 8px 24px -16px rgba(17, 20, 24, .18);
+
+    --f-display: "Newsreader", "Iowan Old Style", Georgia, serif;
+    --f-body:    "Public Sans", "Helvetica Neue", Arial, sans-serif;
+    --f-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0E1116;
+      --surface:     #151A21;
+      --surface-alt: #1B2129;
+      --ink:         #E6EAF0;
+      --ink-soft:    #B0B9C5;
+      --ink-faint:   #838D9B;
+      --rule:        #2A323C;
+      --rule-soft:   #212831;
+      --accent:      #8FB3E8;
+      --accent-soft: #1A2536;
+      --contour:     #3A4757;
+      --pass:        #5FC58B;
+      --warn:        #E0AC5A;
+      --fail:        #EC8A81;
+      --pass-bg:     #16271E;
+      --warn-bg:     #2A2115;
+      --fail-bg:     #2B1917;
+      --term-bg:     #0A0D12;
+      --term-ink:    #CBD3DE;
+      --term-rule:   #1E252E;
+      --shadow:      0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -16px rgba(0, 0, 0, .6);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #0E1116;
+    --surface:     #151A21;
+    --surface-alt: #1B2129;
+    --ink:         #E6EAF0;
+    --ink-soft:    #B0B9C5;
+    --ink-faint:   #838D9B;
+    --rule:        #2A323C;
+    --rule-soft:   #212831;
+    --accent:      #8FB3E8;
+    --accent-soft: #1A2536;
+    --contour:     #3A4757;
+    --pass:        #5FC58B;
+    --warn:        #E0AC5A;
+    --fail:        #EC8A81;
+    --pass-bg:     #16271E;
+    --warn-bg:     #2A2115;
+    --fail-bg:     #2B1917;
+    --term-bg:     #0A0D12;
+    --term-ink:    #CBD3DE;
+    --term-rule:   #1E252E;
+    --shadow:      0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -16px rgba(0, 0, 0, .6);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- shell ---------- */
+  .shell {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 0;
+    max-width: 1180px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  nav.toc {
+    position: sticky;
+    top: 0;
+    max-height: 100vh;
+    overflow-y: auto;
+    padding: 34px 22px 40px 24px;
+    border-right: 1px solid var(--rule-soft);
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+  nav.toc .brand {
+    font-family: var(--f-display);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -.01em;
+    margin: 0 0 2px;
+  }
+  nav.toc .ver {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: .04em;
+    margin-bottom: 22px;
+  }
+  nav.toc .grp {
+    font-family: var(--f-body);
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--ink-faint);
+    margin: 20px 0 7px;
+  }
+  nav.toc a {
+    display: block;
+    padding: 3.5px 0;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    padding-left: 10px;
+    margin-left: -12px;
+  }
+  nav.toc a:hover { color: var(--accent); border-left-color: var(--contour); }
+  nav.toc a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  main {
+    padding: 34px 46px 96px;
+    min-width: 0;
+  }
+
+  .col { max-width: 72ch; }
+
+  /* ---------- masthead ---------- */
+  header.mast { margin-bottom: 8px; }
+  .contour { display: block; width: 100%; height: 54px; margin-bottom: 18px; }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .13em;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: var(--f-display);
+    font-size: clamp(38px, 5.4vw, 56px);
+    font-weight: 500;
+    line-height: 1.04;
+    letter-spacing: -.022em;
+    margin: 0 0 14px;
+    text-wrap: balance;
+  }
+  .standfirst {
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 0 0 26px;
+  }
+  .standfirst strong { color: var(--ink); font-weight: 600; }
+
+  .factbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: var(--surface);
+    overflow: hidden;
+    margin-bottom: 34px;
+  }
+  .factbar div {
+    flex: 1 1 116px;
+    padding: 12px 15px;
+    border-right: 1px solid var(--rule-soft);
+  }
+  .factbar div:last-child { border-right: 0; }
+  .factbar dt {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    color: var(--ink-faint);
+    margin-bottom: 3px;
+  }
+  .factbar dd {
+    margin: 0;
+    font-family: var(--f-mono);
+    font-size: 16px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- sections ---------- */
+  section { padding-top: 30px; scroll-margin-top: 20px; }
+  section + section { border-top: 1px solid var(--rule-soft); margin-top: 34px; }
+
+  h2 {
+    font-family: var(--f-display);
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 1.16;
+    letter-spacing: -.014em;
+    margin: 0 0 8px;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--f-body);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .005em;
+    margin: 30px 0 8px;
+    text-wrap: balance;
+  }
+  h4 {
+    font-family: var(--f-mono);
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 24px 0 6px;
+  }
+  p { margin: 0 0 15px; }
+  a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  strong { font-weight: 600; }
+  ul, ol { margin: 0 0 15px; padding-left: 20px; }
+  li { margin-bottom: 5px; }
+  li::marker { color: var(--ink-faint); }
+
+  code {
+    font-family: var(--f-mono);
+    font-size: .875em;
+    background: var(--surface-alt);
+    padding: .1em .34em;
+    border-radius: 2px;
+  }
+
+  /* ---------- terminal + code ---------- */
+  .term, pre.code {
+    background: var(--term-bg);
+    color: var(--term-ink);
+    border-radius: 4px;
+    margin: 0 0 18px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .term-hd {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 13px;
+    border-bottom: 1px solid var(--term-rule);
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: #7C8798;
+  }
+  .term-hd::before {
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #4A5563;
+    flex: none;
+  }
+  .term pre, pre.code {
+    margin: 0;
+    padding: 14px 15px;
+    overflow-x: auto;
+    font-family: var(--f-mono);
+    font-size: 12.5px;
+    line-height: 1.62;
+    white-space: pre;
+    tab-size: 2;
+  }
+  pre.code { background: var(--term-bg); color: var(--term-ink); }
+  .term pre code, pre.code code { background: none; padding: 0; font-size: inherit; }
+  .c-pass { color: #6FD79B; }
+  .c-fail { color: #F0918A; }
+  .c-warn { color: #E7B96A; }
+  .c-dim  { color: #7C8798; }
+  .c-key  { color: #8FB3E8; }
+  .c-str  { color: #C3D88E; }
+  .c-cmt  { color: #68727F; font-style: italic; }
+
+  /* ---------- tables ---------- */
+  .tw { overflow-x: auto; margin: 0 0 20px; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; line-height: 1.5; }
+  th, td { text-align: left; padding: 9px 13px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  th {
+    background: var(--surface-alt);
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .085em;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  td code { font-size: 12px; }
+  .num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* ---------- pills ---------- */
+  .pill {
+    display: inline-block;
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    padding: 1.5px 7px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .p-pass { background: var(--pass-bg); color: var(--pass); }
+  .p-fail { background: var(--fail-bg); color: var(--fail); }
+  .p-warn { background: var(--warn-bg); color: var(--warn); }
+  .p-obs  { background: var(--accent-soft); color: var(--accent); }
+
+  /* ---------- callouts ---------- */
+  .note {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    padding: 14px 17px;
+    border-radius: 0 3px 3px 0;
+    margin: 0 0 20px;
+    font-size: 14.5px;
+  }
+  .note p:last-child { margin-bottom: 0; }
+  .note .lbl {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: 5px;
+  }
+  .scene {
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 4px 20px 6px;
+    margin: 0 0 20px;
+    background: var(--surface);
+  }
+  .scene p { margin: 12px 0; font-size: 15px; }
+  .scene .mo {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  footer {
+    border-top: 1px solid var(--rule);
+    margin-top: 46px;
+    padding-top: 20px;
+    font-size: 13px;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: 1fr; }
+    nav.toc {
+      position: static;
+      max-height: none;
+      border-right: 0;
+      border-bottom: 1px solid var(--rule);
+      padding: 24px 22px 20px;
+      columns: 2;
+      column-gap: 26px;
+    }
+    nav.toc .brand, nav.toc .ver { column-span: all; }
+    main { padding: 26px 22px 70px; }
+  }
+</style>
+
+<div class="shell">
+
+  <nav class="toc">
+    <p class="brand">Paektu</p>
+    <p class="ver">v0.1.0 &middot; APACHE-2.0</p>
+
+    <p class="grp">Orientation</p>
+    <a href="#what">What it is</a>
+    <a href="#why">Why it exists</a>
+    <a href="#install">Install</a>
+    <a href="#quickstart">Quickstart</a>
+
+    <p class="grp">Concepts</p>
+    <a href="#narrative">Narrative fingerprints</a>
+    <a href="#evidence-types">Evidence typing</a>
+    <a href="#attest">Attestation</a>
+
+    <p class="grp">Reference</p>
+    <a href="#cli">CLI commands</a>
+    <a href="#exit">Exit codes</a>
+    <a href="#checks">Checks</a>
+    <a href="#controls">Controls</a>
+    <a href="#posture">Posture file</a>
+    <a href="#drift">Drift detection</a>
+    <a href="#store">Evidence store</a>
+    <a href="#frameworks">Frameworks</a>
+
+    <p class="grp">Operating</p>
+    <a href="#ci">CI integration</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#extend">Writing a check</a>
+    <a href="#trouble">Troubleshooting</a>
+
+    <p class="grp">Honesty</p>
+    <a href="#limits">Limitations</a>
+    <a href="#links">Links</a>
+  </nav>
+
+  <main>
+    <div class="col">
+
+      <header class="mast">
+        <svg class="contour" viewBox="0 0 800 54" preserveAspectRatio="none" aria-hidden="true">
+          <g fill="none" stroke="var(--contour)" stroke-width="1">
+            <path d="M0 52 Q 130 44 210 34 T 400 8 T 590 34 T 800 52" opacity=".9"/>
+            <path d="M0 54 Q 140 48 220 40 T 400 18 T 580 40 T 800 54" opacity=".6"/>
+            <path d="M0 56 Q 150 52 230 46 T 400 28 T 570 46 T 800 56" opacity=".38"/>
+            <path d="M0 58 Q 160 56 240 52 T 400 38 T 560 52 T 800 58" opacity=".22"/>
+          </g>
+        </svg>
+
+        <p class="eyebrow">Documentation &middot; Complete reference</p>
+        <h1>Paektu</h1>
+        <p class="standfirst">
+          Security controls as code, with <strong>documentation drift detection</strong>.
+          Your automated checks pass, your dashboard is green, and the document your
+          auditor actually reads has been quietly wrong for nine months. This is the
+          tool that catches that.
+        </p>
+
+        <dl class="factbar">
+          <div><dt>Controls</dt><dd>21</dd></div>
+          <div><dt>Checks</dt><dd>14</dd></div>
+          <div><dt>Tests</dt><dd>112</dd></div>
+          <div><dt>Frameworks</dt><dd>5</dd></div>
+          <div><dt>Python</dt><dd>3.10+</dd></div>
+          <div><dt>Deps</dt><dd>1</dd></div>
+        </dl>
+      </header>
+
+      <!-- ================= WHAT ================= -->
+      <section id="what">
+        <h2>What it is</h2>
+        <p>
+          Paektu evaluates security and compliance controls defined as YAML, collects
+          tamper-evident evidence, maps findings to SOC&nbsp;2, ISO&nbsp;27001, HIPAA,
+          PCI&nbsp;DSS and GDPR clauses, and reports drift against a recorded baseline.
+        </p>
+        <p>
+          It does one thing no other compliance tool does: it treats the written
+          <em>narrative</em> attached to each control as a control surface in its own
+          right, with its own evidence and its own failure modes.
+        </p>
+        <p>
+          The name is the highest peak on the Korean peninsula &mdash; the fixed landmark
+          you take your bearings from when everything else on the horizon has moved.
+        </p>
+
+        <div class="term">
+          <div class="term-hd">paektu check</div>
+<pre><code><span class="c-dim">STATUS CONTROL     SEV       MESSAGE
+------------------------------------------------------------------------</span>
+<span class="c-pass">PASS</span>   SEC-004     high      logging.retention_days is 180 (minimum 90) <span class="c-warn">(doc)</span>
+<span class="c-dim">------------------------------------------------------------------------</span>
+21 controls   pass 21   fail 0   warn 0   error 0   skip 0
+posture score 100.0%
+<span class="c-warn">documentation drift on 1 control(s): SEC-004</span>
+audit ready: <span class="c-fail">no</span></code></pre>
+        </div>
+
+        <p>
+          Every control passes. The score is 100%. And it is <strong>not audit
+          ready</strong>, because one narrative no longer describes the system it claims
+          to describe. That line is the product.
+        </p>
+      </section>
+
+      <!-- ================= WHY ================= -->
+      <section id="why">
+        <h2>Why it exists</h2>
+        <p>A compliance programme has <strong>three</strong> artifacts per control, not two.</p>
+
+        <div class="tw">
+          <table>
+            <thead>
+              <tr><th>Artifact</th><th>Who consumes it</th><th>Automated today?</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>The control</strong><br>What is required</td><td>Engineers, tooling</td><td>Yes</td></tr>
+              <tr><td><strong>The evidence</strong><br>What a machine observed</td><td>Auditors, tooling</td><td>Yes</td></tr>
+              <tr><td><strong>The narrative</strong><br>Prose explaining what it does and why it is adequate</td><td>The auditor, the regulator, the enterprise buyer, and now AI agents</td><td><strong>No. Nothing watches it.</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Every platform on the market automates the first two. The third &mdash; the part
+          a human being reads and forms a judgement on &mdash; is a text box somebody
+          filled in once.
+        </p>
+
+        <h3>The failure, concretely</h3>
+        <div class="scene">
+          <p><span class="mo">January</span><br>An engineer writes: <em>&ldquo;Audit logs are retained for 90 days in line with PCI DSS 10.5.&rdquo;</em> True at the time.</p>
+          <p><span class="mo">April</span><br>The platform team raises retention to 180 days. The automated check still passes &mdash; 180 exceeds the 90-day floor. Nobody edits the paragraph.</p>
+          <p><span class="mo">October</span><br>An auditor reads a document asserting 90 days, for a system that keeps 180. <strong>The check was green the entire time.</strong></p>
+        </div>
+
+        <p>
+          That is the benign direction. The dangerous one is the reverse: retention drops
+          to 30 days, the narrative still claims 90, and the documentation is now actively
+          misleading a regulator while the failure sits unread in a backlog.
+        </p>
+        <p>Neither case is detected by any tool that watches only controls and evidence.</p>
+
+        <div class="note">
+          <span class="lbl">The asymmetry</span>
+          <p>
+            Detecting narrative drift costs one CI job. Not detecting it costs a widened
+            audit scope and possibly a finding against a control that was working
+            correctly the whole time.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================= INSTALL ================= -->
+      <section id="install">
+        <h2>Install</h2>
+        <p>Python 3.10 or newer. The only runtime dependency is PyYAML.</p>
+        <div class="term">
+          <div class="term-hd">shell</div>
+<pre><code>git clone https://github.com/Creative-Dhanush/paektu
+cd paektu
+pip install -e <span class="c-str">".[dev]"</span>
+
+paektu --version</code></pre>
+        </div>
+        <p>
+          If <code>paektu</code> is not on your PATH, <code>python -m paektu</code> is
+          identical and is the safer form inside CI, where PATH after a
+          <code>pip install</code> is not always what you expect.
+        </p>
+      </section>
+
+      <!-- ================= QUICKSTART ================= -->
+      <section id="quickstart">
+        <h2>Quickstart</h2>
+
+        <h3>1. Evaluate everything</h3>
+        <div class="term">
+          <div class="term-hd">paektu check</div>
+<pre><code><span class="c-fail">FAIL</span>   SDLC-001    high      no CI pipeline definition found
+<span class="c-warn">WARN</span>   DOC-001     high      narrative exists but has never been attested
+<span class="c-pass">PASS</span>   AC-001      critical  identity.mfa_enforced is declared true
+<span class="c-dim">------------------------------------------------------------------------</span>
+21 controls   pass 19   fail 1   warn 1   error 0   skip 0
+posture score 90.5%
+audit ready: <span class="c-fail">no</span></code></pre>
+        </div>
+        <p>Failures sort to the top, because that is what you came to see.</p>
+
+        <h3>2. Narrow the run</h3>
+        <div class="term">
+          <div class="term-hd">shell</div>
+<pre><code>paektu check --framework SOC2       <span class="c-cmt"># one framework</span>
+paektu check --min-severity high    <span class="c-cmt"># skip low-stakes controls</span>
+paektu check --control SEC-001      <span class="c-cmt"># one control</span>
+paektu check --tag observed         <span class="c-cmt"># only machine-verified controls</span></code></pre>
+        </div>
+        <p>
+          That last filter matters. Controls tagged <code>observed</code> are the ones a
+          machine actually verified, as opposed to those resting on a declaration. When
+          somebody asks what you can genuinely prove, that is the filter to reach for.
+        </p>
+
+        <h3>3. Record a baseline</h3>
+        <div class="term">
+          <div class="term-hd">shell</div>
+<pre><code>paektu check --save-evidence --label baseline</code></pre>
+        </div>
+
+        <h3>4. Watch drift get caught</h3>
+        <p>
+          Change a word inside any <code>narrative:</code> block &mdash; in
+          <code>controls/data-protection.yaml</code>, turn SEC-004's
+          &ldquo;ninety day floor&rdquo; into &ldquo;thirty day floor&rdquo; &mdash; then
+          re-run. The fastest route is the shipped demo, which does this and restores the
+          file on exit:
+        </p>
+        <div class="term">
+          <div class="term-hd">bash examples/demo.sh</div>
+<pre><code><span class="c-pass">PASS</span>   SEC-004   high   logging.retention_days is 180 (minimum 90) <span class="c-warn">(doc)</span>
+
+baseline 2026-08-19T09:14:02Z  -&gt;  current 2026-08-19T11:40:55Z
+score 100.0% -&gt; 100.0% (+0.0)
+
+<span class="c-warn">DOCUMENTATION DRIFT (1)</span>
+  SEC-004 narrative changed since attestation
+
+blocking: <span class="c-fail">yes</span></code></pre>
+        </div>
+        <p>
+          The score did not move. A documentation regression is invisible to a posture
+          score, which is exactly why it needs its own category and its own blocking
+          behaviour.
+        </p>
+      </section>
+
+      <!-- ================= NARRATIVE ================= -->
+      <section id="narrative">
+        <h2>Narrative fingerprints</h2>
+        <p>
+          Each control carries a <code>narrative_hash</code>: a fingerprint of the prose a
+          person last reviewed. On every run the narrative is re-hashed and compared.
+        </p>
+
+        <h3>Whitespace does not count</h3>
+        <p>
+          Fingerprints are computed over whitespace-normalised text. Reflowing a
+          paragraph is <em>not</em> drift; changing a word is. A detector that fires when
+          someone rewraps a line gets muted within a week, and a muted detector is worse
+          than none.
+        </p>
+
+        <h3>Three outcomes, kept separate</h3>
+        <div class="tw">
+          <table>
+            <thead><tr><th>State</th><th>Status</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td>No narrative at all</td><td><span class="pill p-fail">FAIL</span></td><td>Never written</td></tr>
+              <tr><td>Narrative, no fingerprint</td><td><span class="pill p-warn">WARN</span></td><td>Written, never reviewed</td></tr>
+              <tr><td>Fingerprint mismatch</td><td><span class="pill p-fail">FAIL</span></td><td>Reviewed, then changed</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          The middle case warns rather than fails because a narrative awaiting first
+          review is a normal state during authoring. The third fails because prose that
+          drifted after sign-off is a defect, and it is the one an auditor will find.
+          Collapsing them would hide the difference between work never started and work
+          that has silently rotted.
+        </p>
+      </section>
+
+      <!-- ================= EVIDENCE TYPES ================= -->
+      <section id="evidence-types">
+        <h2>Evidence typing</h2>
+        <p>
+          The second load-bearing idea: not all evidence is equal, and the tool refuses
+          to pretend otherwise. Every result records how the fact was established.
+        </p>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Type</th><th>Meaning</th><th>Strength</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><span class="pill p-obs">observed</span></td><td>A machine read your repository</td><td><strong>Strongest</strong></td><td>No AWS keys in tracked files</td></tr>
+              <tr><td><span class="pill p-obs">attested</span></td><td>A named person confirmed it on a recorded date</td><td>Middle</td><td>Access review performed</td></tr>
+              <tr><td><span class="pill p-obs">declared</span></td><td>Somebody typed <code>true</code> in a config file</td><td><strong>Weakest</strong></td><td>MFA is enforced</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          The type is preserved through checks, reports and stored artifacts, so a reader
+          can tell which findings rest on a machine and which rest on somebody's word.
+        </p>
+
+        <h3>Attestation rejects a tickbox</h3>
+        <p>
+          Higher-risk controls use the <code>posture.attested</code> check, which refuses
+          a bare <code>true</code> and demands a name and a date.
+        </p>
+        <pre class="code"><code><span class="c-cmt"># fails: a tickbox is not an attestation</span>
+<span class="c-key">access_review:</span> <span class="c-str">true</span>
+
+<span class="c-cmt"># passes</span>
+<span class="c-key">access_review:</span>
+  <span class="c-key">confirmed:</span> <span class="c-str">true</span>
+  <span class="c-key">attested_by:</span> <span class="c-str">security-lead</span>
+  <span class="c-key">attested_on:</span> <span class="c-str">2026-08-15</span></code></pre>
+        <p>An access review with nobody's name against it is not a review.</p>
+      </section>
+
+      <!-- ================= ATTEST ================= -->
+      <section id="attest">
+        <h2>Attestation</h2>
+        <p>Resolving drift is one command, and it is deliberately a human act.</p>
+        <div class="term">
+          <div class="term-hd">paektu attest SEC-004</div>
+<pre><code>attested SEC-004: <span class="c-dim">b716408a8fb5eaf5</span> -&gt; <span class="c-pass">eb3deb21654b61fc</span></code></pre>
+        </div>
+        <p>
+          The tool will never attest on its own. Not as a safety limitation &mdash;
+          because the fingerprint's entire meaning is <em>&ldquo;a person read these words
+          and stands behind them.&rdquo;</em> A tool that could sign that for you would be
+          recording a fact about itself, and the mechanism would be theatre.
+        </p>
+        <p>
+          For the same reason <code>attest</code> writes a targeted line edit into the
+          YAML rather than re-serialising the file. Round-tripping through a YAML dumper
+          would reflow comments and reorder keys, producing a diff nobody can review
+          &mdash; and an unreviewable diff in the middle of an attestation workflow
+          defeats the purpose.
+        </p>
+        <p>
+          <code>paektu attest all</code> covers every narrative currently stale or never
+          attested. Use it sparingly: attesting twenty narratives in one command is a fair
+          signal that nobody read them.
+        </p>
+      </section>
+
+      <!-- ================= CLI ================= -->
+      <section id="cli">
+        <h2>CLI commands</h2>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Command</th><th>Purpose</th><th>Key flags</th></tr></thead>
+            <tbody>
+              <tr><td><code>check</code></td><td>Evaluate controls and print results</td><td><code>--strict</code> <code>--save-evidence</code> <code>--label</code> <code>--format</code></td></tr>
+              <tr><td><code>report</code></td><td>Audit-facing Markdown or JSON with evidence hashes</td><td><code>--out</code> <code>--format</code> <code>--frameworks</code></td></tr>
+              <tr><td><code>drift</code></td><td>Compare current state against a baseline</td><td><code>--baseline</code> <code>--format</code></td></tr>
+              <tr><td><code>attest</code></td><td>Record that a human reviewed a narrative</td><td><code>ID</code> or <code>all</code></td></tr>
+              <tr><td><code>frameworks</code></td><td>Clause coverage, crosswalk and gaps</td><td><code>--list</code> <code>--format</code></td></tr>
+              <tr><td><code>verify</code></td><td>Re-hash stored evidence, detect tampering</td><td><code>--path</code></td></tr>
+              <tr><td><code>checks</code></td><td>List available check implementations</td><td>&mdash;</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Shared filters</h3>
+        <p>
+          Accepted by <code>check</code>, <code>report</code> and <code>drift</code>, and
+          they combine with AND:
+          <code>--path</code>, <code>--controls</code>, <code>--framework</code>,
+          <code>--control</code>, <code>--tag</code>, <code>--min-severity</code>.
+        </p>
+        <p>
+          If nothing matches, the command exits <code>2</code> rather than reporting a
+          vacuous pass. An empty run that looks like success is worse than an error.
+        </p>
+
+        <h3>Reading the summary</h3>
+        <p>
+          <strong>Posture score</strong> is the share of evaluated controls that passed.
+          Skipped controls are excluded rather than counted as failures, because a control
+          that does not apply should not drag the number down.
+        </p>
+        <p>
+          <strong>Audit ready</strong> is stricter: it requires no failures
+          <em>and</em> no narrative drift. A run can score 100% and still not be audit
+          ready, which is the entire point of tracking prose separately.
+        </p>
+      </section>
+
+      <!-- ================= EXIT ================= -->
+      <section id="exit">
+        <h2>Exit codes</h2>
+        <p>Part of the contract, because the main consumer is a pipeline rather than a person.</p>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td><span class="num">0</span></td><td>Everything the command asked about is satisfied</td></tr>
+              <tr><td><span class="num">1</span></td><td>A control failed, or drift was detected</td></tr>
+              <tr><td><span class="num">2</span></td><td>The tool could not run: bad config, missing controls, unreadable YAML</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note">
+          <span class="lbl">Why 1 and 2 are separate</span>
+          <p>
+            A pipeline must distinguish &ldquo;your compliance posture regressed&rdquo;
+            from &ldquo;the compliance tool is broken.&rdquo; Collapse them and a typo in
+            a control file looks like a real finding &mdash; which is how teams learn to
+            ignore the signal entirely.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================= CHECKS ================= -->
+      <section id="checks">
+        <h2>Checks</h2>
+        <p>
+          Fourteen checks in three families. The <em>does not prove</em> column matters
+          most: a check's limits determine how much weight a pass deserves, and a
+          narrative that repeats those limits is what makes a report trustworthy.
+        </p>
+
+        <h4>repo.* &mdash; observed</h4>
+        <p>
+          These read files on disk. They verify what is <strong>committed</strong>, not
+          what a hosting provider's dashboard claims. A branch protection rule configured
+          in a web UI and never captured in the repo leaves no evidence trail.
+        </p>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Check</th><th>Params</th><th>Proves</th><th>Does not prove</th></tr></thead>
+            <tbody>
+              <tr><td><code>repo.file_present</code></td><td><code>any_of</code></td><td>A file with that name exists</td><td>That its contents are correct, current or non-empty</td></tr>
+              <tr><td><code>repo.no_hardcoded_secrets</code></td><td><code>allow_paths</code></td><td>No string matching a known credential shape is in the working tree</td><td>That the repo is clean. Misses git history and high-entropy strings matching no known shape</td></tr>
+              <tr><td><code>repo.dependencies_pinned</code></td><td><code>manifests</code></td><td>Declared dependencies carry version operators</td><td>That constraints are tight, or that transitive deps are pinned</td></tr>
+              <tr><td><code>repo.ci_configured</code></td><td>&mdash;</td><td>A pipeline definition exists</td><td>That it passes, runs on the right branches, or does anything at all</td></tr>
+              <tr><td><code>repo.tests_present</code></td><td><code>paths</code>, <code>min_files</code></td><td>Test files exist</td><td>Coverage, that tests pass, or that they assert anything meaningful</td></tr>
+              <tr><td><code>repo.gitignore_excludes</code></td><td><code>patterns</code></td><td>The patterns are listed</td><td>That nothing matching them was already committed</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <code>repo.tests_present</code> returns <span class="pill p-warn">WARN</span>
+          below <code>min_files</code> rather than <span class="pill p-fail">FAIL</span>,
+          on the reasoning that a token single test file is worse than none because it
+          creates a false impression of coverage.
+        </p>
+
+        <h4>posture.* &mdash; declared or attested</h4>
+        <p>
+          These read <code>paektu.yaml</code> for facts a repository cannot establish. A
+          missing key is always <span class="pill p-fail">FAIL</span>, never
+          <span class="pill p-warn">SKIP</span> &mdash; silence is not a control.
+        </p>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Check</th><th>Params</th><th>Asks</th></tr></thead>
+            <tbody>
+              <tr><td><code>posture.is_true</code></td><td><code>key</code></td><td>Is this explicitly <code>true</code>?</td></tr>
+              <tr><td><code>posture.at_least</code></td><td><code>key</code>, <code>minimum</code></td><td>Does it meet a numeric floor?</td></tr>
+              <tr><td><code>posture.at_most</code></td><td><code>key</code>, <code>maximum</code></td><td>Does it stay under a ceiling?</td></tr>
+              <tr><td><code>posture.one_of</code></td><td><code>key</code>, <code>allowed</code></td><td>Is it in an approved set?</td></tr>
+              <tr><td><code>posture.attested</code></td><td><code>key</code></td><td>Named signer and date recorded?</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          A non-numeric value where a number is expected returns
+          <span class="pill p-fail">ERROR</span> rather than
+          <span class="pill p-fail">FAIL</span>, because that is a defect in the posture
+          file rather than a finding about the system.
+        </p>
+
+        <h4>docs.* &mdash; observed</h4>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Check</th><th>Params</th><th>Asks</th></tr></thead>
+            <tbody>
+              <tr><td><code>docs.narrative_current</code></td><td>&mdash;</td><td>Does the prose match its attestation?</td></tr>
+              <tr><td><code>docs.pages_present</code></td><td><code>pages</code>, <code>min_chars</code></td><td>Do the docs cover a minimum surface, without stubs?</td></tr>
+              <tr><td><code>docs.evidence_explained</code></td><td><code>markers</code></td><td>Does the narrative state its provenance?</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          The <code>min_chars</code> floor exists because an empty
+          <code>quickstart.md</code> satisfies a naive existence check while helping
+          nobody &mdash; and a stub is arguably worse than an absence, since it stops
+          anyone noticing the gap.
+        </p>
+      </section>
+
+      <!-- ================= CONTROLS ================= -->
+      <section id="controls">
+        <h2>Controls</h2>
+        <p>
+          Twenty-one controls ship across five files, mapped to SOC&nbsp;2,
+          ISO&nbsp;27001, HIPAA, PCI&nbsp;DSS and GDPR clauses.
+        </p>
+        <div class="tw">
+          <table>
+            <thead><tr><th>File</th><th>IDs</th><th>Covers</th></tr></thead>
+            <tbody>
+              <tr><td><code>access-control.yaml</code></td><td><span class="num">AC-001&ndash;004</span></td><td>MFA, least privilege, access review, privileged session lifetime</td></tr>
+              <tr><td><code>data-protection.yaml</code></td><td><span class="num">SEC-001&ndash;005</span></td><td>Committed secrets, encryption at rest and in transit, log retention, gitignore hygiene</td></tr>
+              <tr><td><code>sdlc.yaml</code></td><td><span class="num">SDLC-001&ndash;005</span></td><td>CI, tests, dependency pinning, licence, disclosure route</td></tr>
+              <tr><td><code>resilience.yaml</code></td><td><span class="num">RES-001&ndash;004</span></td><td>Backup restore testing, alerting, incident plan, vendor register</td></tr>
+              <tr><td><code>documentation.yaml</code></td><td><span class="num">DOC-001&ndash;003</span></td><td>Narrative currency, documentation surface, evidence provenance</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Anatomy of a control</h3>
+        <pre class="code"><code><span class="c-key">- id:</span> SEC-004
+  <span class="c-key">title:</span> Audit logs are retained long enough to investigate an incident
+  <span class="c-key">description:</span> <span class="c-dim">&gt;</span>
+    Security-relevant logs are kept for at least ninety days so that an
+    incident discovered late can still be reconstructed.
+  <span class="c-key">check:</span> posture.at_least
+  <span class="c-key">severity:</span> high
+  <span class="c-key">owner:</span> platform-team
+  <span class="c-key">tags:</span> [logging, data]
+  <span class="c-key">params:</span>
+    <span class="c-key">key:</span> logging.retention_days
+    <span class="c-key">minimum:</span> <span class="c-str">90</span>
+  <span class="c-key">frameworks:</span>
+    <span class="c-key">- framework:</span> PCIDSS
+      <span class="c-key">clause:</span> <span class="c-str">"10.5"</span>
+      <span class="c-key">title:</span> Audit log retention
+  <span class="c-key">narrative:</span> <span class="c-dim">&gt;</span>
+    Retention is declared in paektu.yaml and compared against a ninety day
+    floor, chosen because PCI DSS requires three months of immediately
+    available logs. This control checks the declared figure and cannot
+    confirm logs are actually present for that whole window.
+  <span class="c-key">narrative_hash:</span> eb3deb21654b61fc</code></pre>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th>Field</th><th>Required</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>id</code></td><td>Yes</td><td>Stable identifier, unique across every file</td></tr>
+              <tr><td><code>title</code></td><td>Yes</td><td>One line, readable by a non-engineer</td></tr>
+              <tr><td><code>description</code></td><td>Yes</td><td>What the control requires</td></tr>
+              <tr><td><code>check</code></td><td>Yes</td><td>Name of a registered check</td></tr>
+              <tr><td><code>severity</code></td><td>No</td><td><code>low</code> / <code>medium</code> / <code>high</code> / <code>critical</code>. Default <code>medium</code></td></tr>
+              <tr><td><code>owner</code></td><td>No</td><td>Who answers for it. Appears in reports</td></tr>
+              <tr><td><code>tags</code></td><td>No</td><td>Free-form. Filter with <code>--tag</code></td></tr>
+              <tr><td><code>params</code></td><td>No</td><td>Passed to the check; shape depends on the check</td></tr>
+              <tr><td><code>frameworks</code></td><td>No</td><td>Clause citations. Drives coverage reporting</td></tr>
+              <tr><td><code>narrative</code></td><td>No</td><td>Prose for the auditor. Fingerprinted</td></tr>
+              <tr><td><code>narrative_hash</code></td><td>No</td><td>Written by <code>paektu attest</code>, never by hand</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Duplicate ids are a fatal error rather than a warning. Two controls answering to
+          one name means a report can cite a passing result while a failing one exists.
+        </p>
+
+        <h3>Writing a narrative that earns its place</h3>
+        <p>Three things make one useful:</p>
+        <ul>
+          <li><strong>Say whether the fact was observed or declared.</strong> The single most valuable sentence available. It tells a reader exactly how much weight to give the pass.</li>
+          <li><strong>State the limits.</strong> A narrative admitting that a regex scanner misses git history is more trustworthy than one implying comprehensive coverage &mdash; and a reader who finds an unstated limit themselves stops believing the rest of the document.</li>
+          <li><strong>Explain the numbers.</strong> Ninety days and twelve hours are policy choices, not natural constants. Say where they came from, and say when no framework prescribes them.</li>
+        </ul>
+      </section>
+
+      <!-- ================= POSTURE ================= -->
+      <section id="posture">
+        <h2>The posture file</h2>
+        <p>
+          <code>paektu.yaml</code> holds the facts that cannot be established by reading a
+          repository: what the identity provider enforces, how long logs are kept, when
+          somebody last restored a backup.
+        </p>
+        <pre class="code"><code><span class="c-key">posture:</span>
+  <span class="c-key">identity:</span>
+    <span class="c-key">mfa_enforced:</span> <span class="c-str">true</span>
+    <span class="c-key">least_privilege:</span> <span class="c-str">true</span>
+    <span class="c-key">privileged_session_hours:</span> <span class="c-str">8</span>
+
+    <span class="c-key">access_review:</span>
+      <span class="c-key">confirmed:</span> <span class="c-str">true</span>
+      <span class="c-key">attested_by:</span> <span class="c-str">security-lead</span>
+      <span class="c-key">attested_on:</span> <span class="c-str">2026-08-15</span>
+
+  <span class="c-key">data:</span>
+    <span class="c-key">encryption_at_rest:</span> <span class="c-str">true</span>
+    <span class="c-key">min_tls_version:</span> <span class="c-str">"1.2"</span>
+
+  <span class="c-key">logging:</span>
+    <span class="c-key">retention_days:</span> <span class="c-str">180</span></code></pre>
+
+        <div class="note">
+          <span class="lbl">The trust model, stated plainly</span>
+          <p>
+            Editing this file to make a check pass, without changing the underlying
+            system, is compliance theatre. The tool cannot stop you. It can only make
+            sure the resulting report says <em>declared</em> rather than
+            <em>verified</em>, so a reader knows exactly how much weight the claim
+            carries.
+          </p>
+        </div>
+
+        <p>
+          Quote version strings. <code>min_tls_version: 1.2</code> parses as the float
+          <code>1.2</code> and will not match the string <code>"1.2"</code> &mdash; a
+          recurring source of confusing failures.
+        </p>
+      </section>
+
+      <!-- ================= DRIFT ================= -->
+      <section id="drift">
+        <h2>Drift detection</h2>
+        <p>
+          Compliance rots quietly. A control that passed in March and fails in August is
+          the interesting event, and it is invisible if you only ever look at the current
+          run in isolation.
+        </p>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Category</th><th>Blocks?</th><th>Meaning</th><th>What to do</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Regression</strong></td><td><span class="pill p-fail">yes</span></td><td>Passed before, fails now</td><td>Fix the system</td></tr>
+              <tr><td><strong>Narrative drift</strong></td><td><span class="pill p-fail">yes</span></td><td>Prose moved away from its attestation</td><td>Re-review the words</td></tr>
+              <tr><td><strong>Improvement</strong></td><td><span class="pill p-pass">no</span></td><td>Failed before, passes now</td><td>Update the narrative to match</td></tr>
+              <tr><td><strong>Structural</strong></td><td><span class="pill p-pass">no</span></td><td>Controls added or removed</td><td>Review the scope change</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Improvements deserve a note. When a control starts passing, its narrative is
+          usually now wrong in the other direction &mdash; it describes a gap that no
+          longer exists. That is why improvements are surfaced rather than silently
+          celebrated.
+        </p>
+        <p>
+          Regressions are ordered worst-first by severity, so a truncated console view
+          still shows what matters.
+        </p>
+      </section>
+
+      <!-- ================= STORE ================= -->
+      <section id="store">
+        <h2>Evidence store</h2>
+        <p>
+          An auditor does not want a dashboard; they want artifacts with dates on them.
+          Each run is written to a timestamped JSON file under
+          <code>.paektu/evidence/</code>, with a manifest so the history is walkable
+          without a database.
+        </p>
+        <p>
+          Runs are <strong>append-only by design</strong>. Nothing mutates or deletes a
+          previous run, because a compliance tool that can quietly rewrite its own history
+          is worth very little as a source of truth.
+        </p>
+        <div class="term">
+          <div class="term-hd">paektu verify</div>
+<pre><code>verified 3 stored run(s)
+<span class="c-pass">all evidence artifacts match their recorded hashes</span></code></pre>
+        </div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Reported problem</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td><code>manifest hash disagrees with file</code></td><td>The manifest entry was altered</td></tr>
+              <tr><td><code>contents changed after recording</code></td><td>The artifact was edited</td></tr>
+              <tr><td><code>missing or unreadable</code></td><td>The file is gone</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          The store is gitignored, because it is generated output. That has one
+          consequence worth knowing: <strong>CI has no baseline for
+          <code>drift</code></strong> unless you commit one deliberately or cache the
+          directory between runs.
+        </p>
+      </section>
+
+      <!-- ================= FRAMEWORKS ================= -->
+      <section id="frameworks">
+        <h2>Framework crosswalk</h2>
+        <p>
+          One control usually satisfies clauses in several frameworks at once: requiring
+          MFA helps with SOC&nbsp;2 CC6.1, ISO&nbsp;27001 A.5.17 and PCI&nbsp;DSS 8.4
+          simultaneously. Doing that mapping by hand in a spreadsheet is how
+          organisations end up answering the same question four times with three
+          different answers.
+        </p>
+        <div class="term">
+          <div class="term-hd">paektu frameworks SOC2</div>
+<pre><code>SOC2: 11/12 catalogued clauses addressed (91.7%)
+
+  CC6.1            Logical access security software and infrastructure
+                   controls: AC-001, AC-004, SEC-001, SEC-005
+  CC6.2            Registration and authorisation of new users
+                   controls: AC-003
+
+  <span class="c-warn">gaps (1): CC6.8</span></code></pre>
+        </div>
+        <p>Output separates three things:</p>
+        <ul>
+          <li><strong>mapped</strong> &mdash; catalogued clauses your controls cite</li>
+          <li><strong>gaps</strong> &mdash; catalogued clauses nothing cites</li>
+          <li><strong>uncatalogued clauses cited</strong> &mdash; clauses your controls reference that the catalogue does not know, which usually means a typo</li>
+        </ul>
+        <p>
+          That last category exists so a mapping error cannot masquerade as coverage.
+          Coverage counts clauses <em>addressed</em>, not clauses <em>passed</em>. It is a
+          map of what the control set talks about, and it is not a compliance claim.
+        </p>
+        <p>Framework names are fuzzy: <code>soc2</code>, <code>SOC 2</code> and <code>soc-2</code> all resolve.</p>
+      </section>
+
+      <!-- ================= CI ================= -->
+      <section id="ci">
+        <h2>CI integration</h2>
+        <pre class="code"><code><span class="c-key">name:</span> compliance
+
+<span class="c-key">on:</span> [push, pull_request]
+
+<span class="c-key">jobs:</span>
+  <span class="c-key">posture:</span>
+    <span class="c-key">runs-on:</span> ubuntu-latest
+    <span class="c-key">steps:</span>
+      <span class="c-key">- uses:</span> actions/checkout@v4
+      <span class="c-key">- uses:</span> actions/setup-python@v5
+        <span class="c-key">with:</span>
+          <span class="c-key">python-version:</span> <span class="c-str">"3.12"</span>
+      <span class="c-key">- run:</span> pip install -e .
+
+      <span class="c-key">- name:</span> Verify evidence integrity
+        <span class="c-key">run:</span> paektu verify
+
+      <span class="c-key">- name:</span> Check posture
+        <span class="c-key">run:</span> paektu check --strict
+
+      <span class="c-key">- name:</span> Publish report
+        <span class="c-key">if:</span> always()
+        <span class="c-key">run:</span> paektu report --out posture.md
+
+      <span class="c-key">- uses:</span> actions/upload-artifact@v4
+        <span class="c-key">if:</span> always()
+        <span class="c-key">with:</span>
+          <span class="c-key">name:</span> posture-report
+          <span class="c-key">path:</span> posture.md</code></pre>
+        <p>
+          <code>if: always()</code> on the report step matters. The run you most want a
+          report from is the one that just failed.
+        </p>
+        <p>
+          Use <code>--strict</code> on your default branch. Without it a documentation
+          regression merges silently, which is the exact failure this tool exists to
+          prevent.
+        </p>
+      </section>
+
+      <!-- ================= ARCHITECTURE ================= -->
+      <section id="architecture">
+        <h2>Architecture</h2>
+        <pre class="code"><code>paektu/
+├── models.py       Control, Evidence, CheckResult, RunSummary, fingerprinting
+├── registry.py     YAML loading, strict validation, attestation writing
+├── engine.py       Evaluation. A raising check becomes ERROR, never aborts the run
+├── checks/
+│   ├── repo.py     <span class="c-cmt">observed  — reads your repository</span>
+│   ├── posture.py  <span class="c-cmt">declared  — reads paektu.yaml</span>
+│   └── docs.py     <span class="c-cmt">observed  — narrative currency, doc surface</span>
+├── evidence.py     Append-only store, content hashes, tamper detection
+├── drift.py        Four-category comparison against a baseline
+├── frameworks.py   Clause catalogue and crosswalk
+├── report.py       Console tables and audit Markdown
+└── cli.py          Seven subcommands, three exit codes</code></pre>
+        <p>
+          <strong>One runtime dependency: PyYAML.</strong> No network calls, no cloud
+          SDKs, no credentials. That constraint is why runs are reproducible and why the
+          tool can be pointed at any checkout &mdash; and it is the honest reason declared
+          controls exist at all.
+        </p>
+        <p>
+          Reports are Markdown rather than PDF because Markdown diffs. Seeing what changed
+          between last quarter's report and this one is worth more than typographic
+          polish.
+        </p>
+      </section>
+
+      <!-- ================= EXTEND ================= -->
+      <section id="extend">
+        <h2>Writing a check</h2>
+        <p>A check is one decorated function. Nothing else in the codebase needs to change.</p>
+        <pre class="code"><code><span class="c-key">from</span> ..models <span class="c-key">import</span> Evidence, Status
+<span class="c-key">from</span> . <span class="c-key">import</span> Target, register, result
+
+
+<span class="c-warn">@register</span>(<span class="c-str">"repo.readme_mentions_security"</span>)
+<span class="c-key">def</span> readme_mentions_security(control, target: Target):
+    <span class="c-str">"""One-line summary. Shown by `paektu checks`."""</span>
+    body = target.read(<span class="c-str">"README.md"</span>)
+    <span class="c-key">if not</span> body:
+        <span class="c-key">return</span> result(control, Status.SKIP, <span class="c-str">"no README.md to inspect"</span>)
+
+    needle = control.params.get(<span class="c-str">"phrase"</span>, <span class="c-str">"security"</span>)
+    <span class="c-key">if</span> needle.lower() <span class="c-key">in</span> body.lower():
+        <span class="c-key">return</span> result(
+            control, Status.PASS, <span class="c-str">f"README mentions {needle!r}"</span>,
+            evidence=[Evidence(
+                control_id=control.id,
+                collector=<span class="c-str">"repo.readme_mentions_security"</span>,
+                summary=<span class="c-str">f"found {needle!r}"</span>,
+                detail={<span class="c-str">"phrase"</span>: needle, <span class="c-str">"chars"</span>: len(body)},
+            )],
+        )
+
+    <span class="c-key">return</span> result(
+        control, Status.FAIL, <span class="c-str">f"README never mentions {needle!r}"</span>,
+        remediation=<span class="c-str">"add a security section pointing at SECURITY.md"</span>,
+    )</code></pre>
+
+        <h3>The Target API</h3>
+        <pre class="code"><code>target.root                              <span class="c-cmt"># Path to the repository root</span>
+target.path(<span class="c-str">"docs"</span>, <span class="c-str">"index.md"</span>)          <span class="c-cmt"># build a path beneath root</span>
+target.exists(<span class="c-str">"LICENSE"</span>, <span class="c-str">"LICENSE.md"</span>)    <span class="c-cmt"># first candidate, or None</span>
+target.read(<span class="c-str">"README.md"</span>)                 <span class="c-cmt"># text, or "" if unreadable</span>
+target.posture_get(<span class="c-str">"a.b.c"</span>, default=None)  <span class="c-cmt"># nested posture lookup</span></code></pre>
+
+        <h3>Rules worth following</h3>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Rule</th><th>Why</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Return, do not raise</strong></td><td>The engine catches exceptions and converts them to <span class="pill p-fail">ERROR</span> so one broken check cannot cost the whole run &mdash; but a returned status carries a better message than a caught traceback</td></tr>
+              <tr><td><strong><span class="pill p-warn">SKIP</span> means &ldquo;not applicable&rdquo;</strong></td><td>A missing manifest is a skip; a manifest full of unpinned packages is a failure. Conflating them makes the score meaningless</td></tr>
+              <tr><td><strong><span class="pill p-warn">WARN</span> means &ldquo;present but inadequate&rdquo;</strong></td><td>One test file is a warning, not a pass and not a failure. Warnings do not block unless <code>--strict</code></td></tr>
+              <tr><td><strong>Attach evidence with a <code>detail</code> payload</strong></td><td>It gets hashed and the hash lands in the audit report. Evidence a reviewer cannot reproduce is decoration</td></tr>
+              <tr><td><strong>Populate <code>remediation</code> on every failure</strong></td><td>A finding with no next action becomes a permanent backlog item</td></tr>
+              <tr><td><strong>Serialise with <code>default=str</code></strong></td><td>YAML turns <code>attested_on: 2026-08-15</code> into a <code>date</code>. A <code>json.dumps</code> without a fallback encoder crashes on the first attested control &mdash; there is a regression test for this because it already happened once</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TROUBLE ================= -->
+      <section id="trouble">
+        <h2>Troubleshooting</h2>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Symptom</th><th>Cause and fix</th></tr></thead>
+            <tbody>
+              <tr><td><code>paektu: command not found</code></td><td>Not on PATH. Use <code>python -m paektu</code>, which is equivalent and safer in CI</td></tr>
+              <tr><td><code>error: no controls found</code></td><td>Wrong directory, or <code>--controls</code> points somewhere empty. Exits <code>2</code>, because a run with nothing to check is a broken invocation, not a clean bill of health</td></tr>
+              <tr><td><code>error: no controls matched</code></td><td>Filters combine with AND and eliminated everything. Check <code>paektu frameworks --list</code></td></tr>
+              <tr><td><code>invalid YAML</code></td><td>Usually an unquoted clause. <code>clause: 10.5</code> parses as a float; write <code>clause: "10.5"</code></td></tr>
+              <tr><td><code>duplicate control id</code></td><td>Two controls share an id, usually after copying a block. Fatal by design</td></tr>
+              <tr><td><code>unknown check 'posture.is_ture'</code></td><td>Typo, or a check that is never imported. Run <code>paektu checks</code>. New checks must live in <code>repo.py</code>, <code>posture.py</code> or <code>docs.py</code></td></tr>
+              <tr><td><code>not declared in paektu.yaml</code></td><td>Missing posture key. Mind the nesting: <code>identity.mfa_enforced</code> is two levels deep</td></tr>
+              <tr><td><code>attested</code> fails though the value is <code>true</code></td><td>Working as intended. That check wants <code>confirmed</code>, <code>attested_by</code> and <code>attested_on</code></td></tr>
+              <tr><td><code>one_of</code> fails on a correct-looking value</td><td>YAML type coercion. Run <code>--format json</code> and read <code>detail.value</code> to see what arrived</td></tr>
+              <tr><td>A narrative keeps failing after you fixed the text</td><td>Fixing the words is not attesting them. Run <code>paektu attest ID</code></td></tr>
+              <tr><td>Score is high but audit ready is <code>no</code></td><td>Working as intended. The score counts passes; readiness also requires no narrative drift</td></tr>
+              <tr><td>Passes locally, fails in CI</td><td>Either CI uses <code>--strict</code> and you did not, or you have untracked files. Observed checks read the working tree, so an uncommitted <code>LICENSE</code> passes locally and fails in CI</td></tr>
+              <tr><td><code>drift</code> says there are no stored runs</td><td>Record a baseline: <code>paektu check --save-evidence</code>. The store is gitignored, so CI needs one committed or cached</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= LIMITS ================= -->
+      <section id="limits">
+        <h2>Limitations</h2>
+        <p>
+          Stated plainly, because compliance tooling has a reputation for implying more
+          than it delivers. Every one of these also appears in the relevant control's own
+          narrative.
+        </p>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Limitation</th><th>Detail</th></tr></thead>
+            <tbody>
+              <tr><td><strong>It does not make you compliant</strong></td><td>It checks what it says it checks. A green run is not an audit opinion</td></tr>
+              <tr><td><strong>It cannot verify a declaration</strong></td><td>Write <code>mfa_enforced: true</code> without enforcing MFA and it reports a pass. It labels that pass <em>declared</em> &mdash; the point of the labelling &mdash; but it cannot go and look</td></tr>
+              <tr><td><strong>The secret scanner is a coarse net</strong></td><td>Regex over the working tree. Misses credentials removed from the tree but still in git history, and high-entropy strings matching no known shape</td></tr>
+              <tr><td><strong>It cannot tell if a narrative is <em>accurate</em></strong></td><td>Only whether a person confirmed it since it last changed. A confidently wrong narrative, attested, passes cleanly</td></tr>
+              <tr><td><strong>Attestation is only as good as the review</strong></td><td><code>attest all</code> after skimming is indistinguishable, to the tool, from a careful reading</td></tr>
+              <tr><td><strong>Drift is only tracked in prose it holds</strong></td><td>If your real documentation lives in a wiki and the narrative is a summary, the fingerprint tracks the summary. The wiki can rot untouched</td></tr>
+              <tr><td><strong><code>docs.evidence_explained</code> is a keyword search</strong></td><td>Easy to satisfy without meaning it. Value is as a review prompt, not an assurance</td></tr>
+              <tr><td><strong>Framework coverage is partial</strong></td><td>Counts clauses addressed, not clauses passed, and lists gaps rather than hiding them</td></tr>
+              <tr><td><strong>No live cloud scanning</strong></td><td>By design. That is what the posture file and the <em>declared</em> label exist to be honest about</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note">
+          <span class="lbl">What it does buy you</span>
+          <p>
+            The failure mode changes shape. Instead of prose rotting invisibly for nine
+            months, a diff to a narrative surfaces in the next CI run and lands in front
+            of whoever owns the control.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================= LINKS ================= -->
+      <section id="links">
+        <h2>Links</h2>
+
+        <h3>Project</h3>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Resource</th><th>Location</th></tr></thead>
+            <tbody>
+              <tr><td>Repository</td><td><a href="https://github.com/Creative-Dhanush/paektu">github.com/Creative-Dhanush/paektu</a></td></tr>
+              <tr><td>CI pipeline</td><td><a href="https://github.com/Creative-Dhanush/paektu/actions">Actions</a></td></tr>
+              <tr><td>Issues</td><td><a href="https://github.com/Creative-Dhanush/paektu/issues">Issues</a></td></tr>
+              <tr><td>Licence</td><td><a href="https://github.com/Creative-Dhanush/paektu/blob/main/LICENSE">Apache-2.0</a></td></tr>
+              <tr><td>Security policy</td><td><a href="https://github.com/Creative-Dhanush/paektu/blob/main/SECURITY.md">SECURITY.md</a></td></tr>
+              <tr><td>Changelog</td><td><a href="https://github.com/Creative-Dhanush/paektu/blob/main/CHANGELOG.md">CHANGELOG.md</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Frameworks referenced</h3>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Framework</th><th>Authority</th></tr></thead>
+            <tbody>
+              <tr><td>SOC 2</td><td><a href="https://www.aicpa-cima.com/resources/landing/system-and-organization-controls-soc-suite-of-services">AICPA Trust Services Criteria</a></td></tr>
+              <tr><td>ISO/IEC 27001:2022</td><td><a href="https://www.iso.org/standard/27001">ISO</a></td></tr>
+              <tr><td>HIPAA Security Rule</td><td><a href="https://www.hhs.gov/hipaa/for-professionals/security/index.html">US HHS</a></td></tr>
+              <tr><td>PCI DSS v4.0</td><td><a href="https://www.pcisecuritystandards.org/">PCI Security Standards Council</a></td></tr>
+              <tr><td>GDPR</td><td><a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj">EUR-Lex 2016/679</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Related tools and prior art</h3>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Tool</th><th>Relationship</th></tr></thead>
+            <tbody>
+              <tr><td><a href="https://www.open-scap.org/">OpenSCAP</a></td><td>Host configuration scanning; no documentation layer</td></tr>
+              <tr><td><a href="https://cloudcustodian.io/">Cloud Custodian</a></td><td>Cloud policy enforcement; no narrative concept</td></tr>
+              <tr><td><a href="https://pages.nist.gov/OSCAL/">OSCAL</a></td><td>NIST control interchange format; a planned export target</td></tr>
+              <tr><td><a href="https://www.openpolicyagent.org/">Open Policy Agent</a></td><td>Policy as code for authorisation, an adjacent problem</td></tr>
+              <tr><td><a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a></td><td>Changelog convention used here</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <footer>
+          <p>
+            <strong>Paektu</strong> v0.1.0 &middot; Apache-2.0 &middot; built by
+            <a href="https://github.com/Creative-Dhanush">Dhanush N</a>
+          </p>
+          <p>Your checks passing is not the same as your documentation being true.</p>
+        </footer>
+      </section>
+
+    </div>
+  </main>
+</div>
